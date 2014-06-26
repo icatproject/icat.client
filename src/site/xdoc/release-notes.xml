@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+    <properties>
+        <title>ICAT Client Release Notes</title>
+    </properties>
+
+    <body>
+
+        <section name="4.3.3">
+            <p>This is a bug fix release.
+            </p>
+            <ul>
+                <li>The user documentation has been improved.
+                </li>
+                <li>The .jar file is much smaller having removed a lot of material that should not have been there.
+                </li>
+            </ul>
+        </section>
+
+    </body>
+</document>
+            
+            
+   

@@ -10,10 +10,50 @@
 
     <properties>
         <wsdl>${basedir}/ICAT.wsdl</wsdl>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <repoUrl>http://icatproject.org/mvn/repo</repoUrl>
     </properties>
 
-    <build>
+    <issueManagement>
+        <url>http://code.google.com/p/icatproject/issues/list</url>
+        <system>Google Code</system>
+    </issueManagement>
 
+    <scm>
+        <connection>scm:svn:http://icatproject.googlecode.com/svn/icat/client/trunk</connection>
+        <developerConnection>scm:svn:https://icatproject.googlecode.com/svn/icat/client/trunk</developerConnection>
+        <url>http://code.google.com/p/icatproject/source/browse/#svn%2Ficat%2Fclient%2Ftrunk</url>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>BSD 2-Clause</name>
+            <url>http://www.opensource.org/licenses/BSD-2-Clause</url>
+            <distribution>repo</distribution>
+            <comments>Also know informally as the Simplified BSD or FreeBSD License</comments>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>The ICAT Collaboration</name>
+        <url>http://icatproject.org</url>
+    </organization>
+
+
+
+    <distributionManagement>
+        <downloadUrl>http://icatproject.org/mvn/repo</downloadUrl>
+        <site>
+            <id>website</id>
+            <url>scp://icatproject.org/var/www/html/mvn/site/icat/client/${project.version}</url>
+        </site>
+        <repository>
+            <id>repo</id>
+            <url>scp://icatproject.org/var/www/html/mvn/repo</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
         <plugins>
 
             <plugin>
@@ -36,8 +76,8 @@
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
+
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
@@ -65,14 +105,11 @@
                             <wsdlUrls>
                                 <wsdlUrl>${wsdl}</wsdlUrl>
                             </wsdlUrls>
-                            <packageName>org.icatproject_4_3_1</packageName>
+                            <packageName>org.icatproject_4_3_3</packageName>
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
-
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -93,6 +130,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.3</version>
+                <dependencies>
+                    <dependency><!-- add support for ssh/scp -->
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-ssh</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.7</version>
+                <dependencies>
+                    <dependency><!-- add support for ssh/scp -->
+                        <groupId>org.apache.maven.wagon</groupId>
+                        <artifactId>wagon-ssh</artifactId>
+                        <version>1.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>
@@ -106,11 +163,33 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>summary</report>
+                            <report>dependencies</report>
+                            <report>issue-tracking</report>
+                            <report>license</report>
+                            <report>plugins</report>
+                            <report>scm</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
         </plugins>
     </reporting>
 
     <description>Provides facilities to login to an ICAT instance after which one can create, read, update or delete entities according to your permissions.</description>
-
 
 </project>
 
