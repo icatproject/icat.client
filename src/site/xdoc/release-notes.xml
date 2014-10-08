@@ -7,6 +7,15 @@
 
     <body>
 
+        <section name="4.4.0">
+            <p>This adds an experimental RESTful interface.
+            </p>
+            <ul>
+                <li>An experimental RESTful interface has been added to provide, initially, import and export facilities.
+                </li>
+            </ul>
+        </section>
+
         <section name="4.3.3">
             <p>This is a bug fix release.
             </p>

@@ -2,29 +2,22 @@
 <document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
     <properties>
-        <title>ICAT Java Client User Manual</title>
+         <title>ICAT SOAP based Java Client User Manual</title>
     </properties>
 
     <body>
 
         <section name="Introduction">
 
-
-            <p>The ICAT4 API is a layer on top of a relational DBMS.
-                The database is wrapped as a web service so that the tables are
-                not
-                exposed
-                directly. Each table in the database is mapped onto a
-                data structure exposed by the web service. When the web service
-                interface
-                definition (WSDL) is processed for Java then each data
-                structure results in a class definition.
+            <p>The ICAT4 API is a layer on top of a relational DBMS. The database is wrapped as a web service so that the tables are not exposed
+                directly. Each table in the database is mapped onto a data structure exposed by the web service. When the web service interface
+                definition (WSDL) is processed for Java then each data structure results in a class definition.
             </p>
 
             <p>
                 You may also consult the
-                <a href="apidocs">javadoc.</a>
-                Please note that this is not very helpful as it is generated from machine generated source code derived from WSDL that conatins no
+                <a href="apidocs/index.html">javadoc.</a>
+                Please note that this is not very helpful as it is generated from machine generated source code derived from WSDL that contains no
                 comments.
             </p>
 

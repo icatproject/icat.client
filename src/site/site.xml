@@ -4,7 +4,8 @@
   <body>
   
        <menu name="Information for Users">  
-           <item name="Java Client User Manual" href="manual.html"/>
+           <item name="Java Client User Manual (SOAP)" href="manual_soap.html"/>
+              <item name="Java Client User Manual (REST)" href="manual_rest.html"/>
            <item name="Java Client Javadoc" href="apidocs/index.html"/>
            <item name="Issue Tracking" href="issue-tracking.html"/>
            <item name="Release Notes" href="release-notes.html"/>
