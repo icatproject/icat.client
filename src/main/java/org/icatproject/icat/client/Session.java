@@ -8,16 +8,16 @@ import java.nio.file.Path;
  * <p>
  * The exportMetaData and ImportMetaData call make use of a special format to represent ICAT data
  * efficiently. The file may contain line starting with a # sign. The first non-comment line
- * contains the version number (major and minor parts but not patch) of the server for which this
- * file should be compatible. Each entity type is preceded by a blank line line followed by a one
- * line entity descriptor and then a line for each entity of that type.
+ * contains the version number of the file format with major and minor parts. Each entity type is
+ * preceded by a blank line line followed by a one line entity descriptor and then a line for each
+ * entity of that type.
  * <p>
  * For example:
  * <p>
  * 
  * <pre>
- * # Version of ICAT server for which this matches
- * 4.4
+ * #  Version of file format
+ * 1.0
  * 
  * Facility ( name:0, daysUntilRelease:1, createId:2, createTime:3)
  * "Test port facility", 90, "Zorro", 1920-05-16T16:58:26.12Z
