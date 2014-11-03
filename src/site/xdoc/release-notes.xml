@@ -11,7 +11,7 @@
             <p>This adds an experimental RESTful interface.
             </p>
             <ul>
-                <li>An experimental RESTful interface has been added to provide, initially, import and export facilities.
+                <li>An experimental RESTful interface has been added to provide import and export facilities as well as more experimental calls.
                 </li>
             </ul>
         </section>
@@ -29,6 +29,3 @@
 
     </body>
 </document>
-            
-            
-   

@@ -2,6 +2,7 @@ package org.icatproject.icat.client;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.List;
 
 /**
  * A RESTful ICAT session.
@@ -94,21 +95,21 @@ public class Session {
 
 	/** Control the action when a duplicate entry is encountered on import */
 	public enum DuplicateAction {
-		/** Throw an expection */
-		THROW,
+		/** Check that new data matches the old */
+		CHECK,
 
 		/** Don't check just go to the next row */
 		IGNORE,
 
-		/** Check that new data matches the old */
-		CHECK,
-
 		/** Replace old data with new */
-		OVERWRITE
+		OVERWRITE,
+
+		/** Throw an expection */
+		THROW
 	}
 
-	private String sessionId;
 	private ICAT icat;
+	private String sessionId;
 
 	Session(ICAT icat, String sessionId) {
 		this.icat = icat;
@@ -116,64 +117,20 @@ public class Session {
 	}
 
 	/**
-	 * Return the user name corresponding to the session.
+	 * Create ICAT entities from a Json String.
 	 * 
-	 * @return the user name
+	 * Note that this call is experimental and should not be relied upon to continue in its present
+	 * form.
 	 * 
-	 * @throws IcatException
-	 */
-	public String getUserName() throws IcatException {
-		return icat.getUserName(sessionId);
-	}
-
-	/**
-	 * Return the time remaining in the session in minutes
+	 * @param entities
+	 *            Json representation of ICAT entities and their related entities
 	 * 
-	 * @return the time remaining
+	 * @return the ids of the top level entities created
 	 * 
 	 * @throws IcatException
 	 */
-	public double getRemainingMinutes() throws IcatException {
-		return icat.getRemainingMinutes(sessionId);
-	}
-
-	/**
-	 * Logout of the session after which the session cannot be re-used
-	 * 
-	 * @throws IcatException
-	 */
-	public void logout() throws IcatException {
-		icat.logout(sessionId);
-	}
-
-	/**
-	 * Refresh the session and thereby reset the time remaining
-	 * 
-	 * @throws IcatException
-	 */
-	public void refresh() throws IcatException {
-		icat.refresh(sessionId);
-	}
-
-	/**
-	 * Import metadata into ICAT for a file specified by a Path
-	 * 
-	 * @param path
-	 *            the path of the import file. The structure of the import file is described at
-	 *            {@link Session}
-	 * @param duplicateAction
-	 *            what to do when a duplicate is encountered
-	 * @param attributes
-	 *            which attributes to import. Only a "root user" can specify {@link Attributes#ALL}
-	 *            to respect those fields specified in the import file which are not settable by
-	 *            normal users: createId, createTime, modId and modTime. This is to allow an ICAT to
-	 *            be accurately exported and imported.
-	 * 
-	 * @throws IcatException
-	 */
-	public void importMetaData(Path path, DuplicateAction duplicateAction, Attributes attributes)
-			throws IcatException {
-		icat.importMetaData(sessionId, path, duplicateAction, attributes);
+	public List<Long> create(String entities) throws IcatException {
+		return icat.create(sessionId, entities);
 	}
 
 	/**
@@ -212,10 +169,71 @@ public class Session {
 	}
 
 	/**
-	 * Carry out an ICAT search the data are returned as a Json string
+	 * Return the time remaining in the session in minutes
 	 * 
-	 * Note that this call is very experimental and should not be relied upon to continue in its
-	 * present form.
+	 * @return the time remaining
+	 * 
+	 * @throws IcatException
+	 */
+	public double getRemainingMinutes() throws IcatException {
+		return icat.getRemainingMinutes(sessionId);
+	}
+
+	/**
+	 * Return the user name corresponding to the session.
+	 * 
+	 * @return the user name
+	 * 
+	 * @throws IcatException
+	 */
+	public String getUserName() throws IcatException {
+		return icat.getUserName(sessionId);
+	}
+
+	/**
+	 * Import metadata into ICAT for a file specified by a Path
+	 * 
+	 * @param path
+	 *            the path of the import file. The structure of the import file is described at
+	 *            {@link Session}
+	 * @param duplicateAction
+	 *            what to do when a duplicate is encountered
+	 * @param attributes
+	 *            which attributes to import. Only a "root user" can specify {@link Attributes#ALL}
+	 *            to respect those fields specified in the import file which are not settable by
+	 *            normal users: createId, createTime, modId and modTime. This is to allow an ICAT to
+	 *            be accurately exported and imported.
+	 * 
+	 * @throws IcatException
+	 */
+	public void importMetaData(Path path, DuplicateAction duplicateAction, Attributes attributes)
+			throws IcatException {
+		icat.importMetaData(sessionId, path, duplicateAction, attributes);
+	}
+
+	/**
+	 * Logout of the session after which the session cannot be re-used
+	 * 
+	 * @throws IcatException
+	 */
+	public void logout() throws IcatException {
+		icat.logout(sessionId);
+	}
+
+	/**
+	 * Refresh the session and thereby reset the time remaining
+	 * 
+	 * @throws IcatException
+	 */
+	public void refresh() throws IcatException {
+		icat.refresh(sessionId);
+	}
+
+	/**
+	 * Carry out an ICAT search. The data are returned as a Json string
+	 * 
+	 * Note that this call is experimental and should not be relied upon to continue in its present
+	 * form.
 	 * 
 	 * @param query
 	 *            a normal ICAT query with optional INCLUDE and LIMIT clauses.
@@ -229,20 +247,23 @@ public class Session {
 	}
 
 	/**
-	 * Create an ICAT entity from a Json String.
+	 * Carry out an ICAT get. The data are returned as a Json string
 	 * 
-	 * Note that this call is very experimental and should not be relied upon to continue in its
-	 * present form.
+	 * Note that this call is experimental and should not be relied upon to continue in its present
+	 * form.
 	 * 
-	 * @param bean
-	 *            Json represntation of an ICAT entity and its related entities
+	 * @param query
+	 *            a normal ICAT get query with an optional INCLUDE clause.
 	 * 
-	 * @return the id of the top level entity
+	 * @param id
+	 *            the id of the entity to be returned
+	 * 
+	 * @return the Json holding the result
 	 * 
 	 * @throws IcatException
 	 */
-	public long create(String bean) throws IcatException {
-		return icat.create(sessionId, bean);
+	public String get(String query, long id) throws IcatException {
+		return icat.get(sessionId, query, id);
 	}
 
 }

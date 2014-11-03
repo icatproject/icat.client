@@ -18,7 +18,7 @@
                 <a href="apidocs/org/icatproject/icat/client/package-summary.html">javadoc.</a>
                 However to understand it you must first grasp the idea of ICAT by reading about the
                 <a href="manual_soap.html">SOAP based interface</a>
-                . The RESTful interface is currently experimental especially the create and search calls.
+                . The RESTful interface is currently experimental especially the create, search and get calls.
             </p>
 
             <p>
