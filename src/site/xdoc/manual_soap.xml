@@ -2,7 +2,7 @@
 <document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 
     <properties>
-         <title>ICAT SOAP based Java Client User Manual</title>
+        <title>ICAT SOAP based Java Client User Manual</title>
     </properties>
 
     <body>
@@ -433,20 +433,20 @@
             </subsection>
 
             <subsection name="Choice of query syntax">
-                <p>There are alternative syntaxes for the query, the JPQL inspired syntax and the concise syntax. There are a number of reasons to
-                    prefer the JPQL inspired syntax.
+                <p>There are alternative syntaxes for the query, the JPQL style syntax and the concise syntax. There are a number of reasons to
+                    prefer
+                    the JPQL style syntax.
                 </p>
                 <ul>
                     <li>It is much more powerful and the search is able to do (almost) anything that can be done via JPQL.</li>
                     <li>If you don't understand the limitations of the concise syntax the limitations can be confusing.</li>
                     <li>You can look up JPQL in a book or on the web.</li>
-                    <li>If you use the concise syntax it is first translated to the JPQL inspired syntax and so is slightly less efficient and if
-                        the
-                        conversion is not done correctly then you may get back an error message which is hard to interpret.
+                    <li>If you use the concise syntax it is first translated to the JPQL style syntax and if the conversion is not done correctly then
+                        you may get back an error message which is hard to interpret.
                     </li>
                 </ul>
-                <p>On the other hand the concise syntax obviously shorter and perhaps more readable.</p>
-                <p>If the query is getting complex then use the JPQL inspired syntax which will be explained first each time it occurs.</p>
+                <p>On the other hand the concise syntax is obviously shorter and perhaps more readable.</p>
+                <p>If the query is getting complex then use the JPQL style syntax which will be explained first each time it occurs.</p>
             </subsection>
 
 
@@ -454,7 +454,7 @@
                 <p class="call">EntityBaseBean get(String sessionId, String query, long id)
                 </p>
 
-                <p>The first parameter is the sessionId, the second is a query string in either the JPQL inspired or the concise syntax and the last
+                <p>The first parameter is the sessionId, the second is a query string in either the JPQL style or the concise syntax and the last
                     parameter is the id of the object. You may know the id of an object because you have created it or it was returned from a search
                     call. For example:
                 </p>
@@ -465,7 +465,7 @@
                 </p>
 
                 <a name="get_jpql_include"></a>
-                <h4>JPQL inspired syntax</h4>
+                <h4>JPQL style syntax for get calls with INCLUDEs</h4>
 
                 <p>To get a Dataset with all its Datafiles you can have the query:
                 </p>
@@ -526,7 +526,7 @@
                     <tt>"Dataset INCLUDE DatafileParameter"</tt>
                     as there must be only one route from the original type to each of the included types - i.e. you can only construct one DAG from
                     the starting object. There is evidently no way to express the query "dataset including the datasets with the same type as a
-                    particular dataset" as dataset appears twice. So you would need to use the JPQL inspired syntax.
+                    particular dataset" as dataset appears twice. So you would need to use the JPQL style syntax.
                 </p>
 
             </subsection>
@@ -654,11 +654,11 @@
                     you are associated:
                 </p>
                 <code>
-                    SELECT Investigation i, i.investigationUser iu WHERE iu.name = :user
+                    SELECT i FROM Investigation i, i.investigationUsers ius WHERE ius.user.name = :user
                 </code>
                 <p>Time literals (which are implementation dependent in JPQL) should be expressed as shown in the next example:</p>
                 <code>
-                    SELECT Investigation i WHERE i.createTime > {ts 2011-01-15 00:00:00}
+                    SELECT i FROM Investigation i WHERE i.createTime > {ts 2011-01-15 00:00:00}
                 </code>
                 <p>The timestamp format must be exactly as shown. Literal boolean values are TRUE and FALSE as in:</p>
                 <code>SELECT ds FROM Dataset ds WHERE ds.complete = TRUE</code>
@@ -810,12 +810,13 @@
             <p>
                 <a name="authorization" />
                 The mechanism is rule based. Rules allow groupings of users to do things. There are four things that can be done: Create, Read, Update
-                and Delete. It makes use of five tables: Rule, User, Grouping, UserGroup and PublicStep. The name "Grouping" has been introduced as
+                and Delete. It makes use of five entity types: Rule, User, Grouping, UserGroup and PublicStep. The name "Grouping" has been introduced
+                as
                 "Group" is a reserved word in JPQL. The authentication mechanism authenticates a person with a certain name and this name identifies
                 the User in the ICAT User table. Groupings have names and the UserGroup performs the function of a "many to many" relationship between
-                Users and Groupings. Rules are applied to Groupings. There are special "root users" able to manipulate these five tables, but only
-                these five unless a "root user" creates rules to give himself further powers. Apart from the special role of "root users" these tables
-                behave as other ICAT tables do. The set of "root users" is a configuration parameter of the ICAT installation.
+                Users and Groupings. Rules are applied to Groupings. There are special "root users" with full access to all entities. The set of "root
+                users" is a configuration parameter of the ICAT installation. Only a root user can set up the initial set of authorization rules
+                though these rules can then allow others to manipulate rules.
             </p>
             <subsection name="Rules" id="rules">
                 <p>

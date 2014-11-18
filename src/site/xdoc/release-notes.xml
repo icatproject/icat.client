@@ -13,6 +13,7 @@
             <ul>
                 <li>An experimental RESTful interface has been added to provide import and export facilities as well as more experimental calls.
                 </li>
+                <li>Some errors have been fixed in the documentation.</li>
             </ul>
         </section>
 
