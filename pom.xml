@@ -3,7 +3,7 @@
 
     <groupId>org.icatproject</groupId>
     <artifactId>icat.client</artifactId>
-    <version>4.4.0</version>
+    <version>4.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>ICAT Java Client</name>
 
@@ -19,9 +19,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:svn:http://icatproject.googlecode.com/svn/icat/client/tags/icat.client-4.4.0</connection>
-        <developerConnection>scm:svn:https://icatproject.googlecode.com/svn/icat/client/tags/icat.client-4.4.0</developerConnection>
-        <url>http://code.google.com/p/icatproject/source/browse/#svn%2Ficat%2Fclient%2Ftrunk/tags/icat.client-4.4.0</url>
+        <connection>scm:svn:http://icatproject.googlecode.com/svn/icat/client/trunk</connection>
+        <developerConnection>scm:svn:https://icatproject.googlecode.com/svn/icat/client/trunk</developerConnection>
+        <url>http://code.google.com/p/icatproject/source/browse/#svn%2Ficat%2Fclient%2Ftrunk</url>
     </scm>
 
     <licenses>
