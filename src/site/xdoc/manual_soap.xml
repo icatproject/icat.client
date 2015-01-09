@@ -197,7 +197,7 @@
                 <p>
                     To understand exactly how the data manipulation calls work
                     requires an understanding of the
-                    <a href="../../server/4.3.2/icat.core/schema.html" target="_blank">schema.</a>
+                    <a href="../../server/4.4.0/schema.html" target="_blank">schema.</a>
                     Please take a look now to make sense of the following explanation.
                 </p>
                 <p>
@@ -210,14 +210,14 @@
                     this is
                     <tt>investigation, name</tt>
                     where
-                    <tt>name</tt>
+                    <tt>investigation</tt>
                     represents a relationship. No more than one one Dataset may exist with those two fields having the same
                     value. These constraints
                     are enforced by ICAT.
                 </p>
                 <p>The relationship table is shown next. The first column shows the minimum and maximum cardinality of the relationships. A Dataset
                     may be
-                    related to any number of OutputDatasets, to at most one investigation and to exactly one DatasetType. The next column shows
+                    related to any number of DataCollectionDataset, to at most one Sample and to exactly one DatasetType. The next column shows
                     the name
                     of the related class and this is followed by the name of the field which is used to represent the relationship. The basic
                     field name
