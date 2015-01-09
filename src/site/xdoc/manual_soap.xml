@@ -217,7 +217,7 @@
                 </p>
                 <p>The relationship table is shown next. The first column shows the minimum and maximum cardinality of the relationships. A Dataset
                     may be
-                    related to any number of DataCollectionDataset, to at most one Sample and to exactly one DatasetType. The next column shows
+                    related to any number of DataCollectionDatasets, to at most one Sample and to exactly one DatasetType. The next column shows
                     the name
                     of the related class and this is followed by the name of the field which is used to represent the relationship. The basic
                     field name
