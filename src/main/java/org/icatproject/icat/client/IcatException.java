@@ -6,9 +6,9 @@ public class IcatException extends Exception {
 
 	/** The type of the IcatException */
 	public enum IcatExceptionType {
-		/** An input paramter appears to be incorrect */
+		/** An input parameter appears to be incorrect */
 		BAD_PARAMETER,
-		/** Some internal error has occured */
+		/** Some internal error has occurred */
 		INTERNAL,
 		/** This is normally an authorization problem */
 		INSUFFICIENT_PRIVILEGES,
@@ -18,7 +18,7 @@ public class IcatException extends Exception {
 		OBJECT_ALREADY_EXISTS,
 		/** This is normally an authentication problem or the session has expired */
 		SESSION,
-		/** If the call is not approriate for the system in the current state */
+		/** If the call is not appropriate for the system in the current state */
 		VALIDATION
 	}
 
