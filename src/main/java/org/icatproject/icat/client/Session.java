@@ -46,14 +46,14 @@ import java.util.List;
  * seconds and time zones. If the time zone is omitted it is interpreted as local time.
  * <p>
  * Now consider the InvestigationType for which we need to specify the facility to which it belongs
- * and its name. The facility cannot be descibed by its id because we don't know what it is. So
+ * and its name. The facility cannot be described by its id because we don't know what it is. So
  * instead we list in parentheses the field names that define it. So name:0 is the name of the
  * facility and name:1 is the name of the InvestigationType.
  * <p>
  * The next line shows the convenience of this syntax. The investigation has a facility (identified
  * by its name:0) and the name:1 of the investigation and the visitId but it also has a type which
  * is identified a facility (identified by its name:0) and by the name:3 of the type. Finally it has
- * a title:4 field. Note that name:0 is used twice as in this case the inverstigation belongs to the
+ * a title:4 field. Note that name:0 is used twice as in this case the investigation belongs to the
  * same facility as its type. This works fine as long as we deal with entity types which have key
  * fields. This is shown in the next snippet from an import file:
  * <p>
@@ -104,7 +104,7 @@ public class Session {
 		/** Replace old data with new */
 		OVERWRITE,
 
-		/** Throw an expection */
+		/** Throw an exception */
 		THROW
 	}
 
