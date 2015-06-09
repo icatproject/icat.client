@@ -7,10 +7,11 @@ import java.util.List;
 /**
  * A RESTful ICAT session.
  * <p>
- * The exportMetaData and ImportMetaData call make use of a special format to represent ICAT data
- * efficiently. The file may contain line starting with a # sign. The first non-comment line
- * contains the version number of the file format with major and minor parts. Each entity type is
- * preceded by a blank line line followed by a one line entity descriptor and then a line for each
+ * The exportMetaData and ImportMetaData call make use of a special format to
+ * represent ICAT data efficiently. The file may contain line starting with a #
+ * sign. The first non-comment line contains the version number of the file
+ * format with major and minor parts. Each entity type is preceded by a blank
+ * line line followed by a one line entity descriptor and then a line for each
  * entity of that type.
  * <p>
  * For example:
@@ -31,31 +32,52 @@ import java.util.List;
  * "Test port facility", "expt1", "one", "atype", "a title"
  * </pre>
  * <p>
- * The entity descriptor starts with the name of the entity type followed by a comma separated list
- * attribute of field names held inside parentheses. It is not necessary to include those which you
- * don't wish to set as any that are not present and are allowed to be null will be set to null when
- * importing. So we see that this file will create a Facility with fields: name, daysUntilRelease,
- * createId and createTime. Following the field name is a colon and an integer showing the offset to
- * the data field in each of the next set of rows. So a facility will be created with a name of
- * "Test port facility" and with 90 daysUntilRelease. All strings must be enclosed in double quotes
- * and to represent a double quote within the string then two double quotes must be used. True,
- * false and null literals are not case sensitive. The last two fields of the facility are createId
- * and createTime. If you specify that you want all attributes and you are a "root user" then the
- * values of createId and createTime will be respected otherwise the current time is used and the id
- * is that of the user doing the import. Timestamps literals follow ISO 8601 and support fractional
- * seconds and time zones. If the time zone is omitted it is interpreted as local time.
+ * The entity descriptor starts with the name of the entity type followed by a
+ * comma separated list attribute of field names held inside parentheses. It is
+ * not necessary to include those which you don't wish to set as any that are
+ * not present and are allowed to be null will be set to null when importing. So
+ * we see that this file will create a Facility with fields: name,
+ * daysUntilRelease, createId and createTime. Following the field name is a
+ * colon and an integer showing the offset to the data field in each of the next
+ * set of rows. So a facility will be created with a name of
+ * "Test port facility" and with 90 daysUntilRelease. All strings must be
+ * enclosed in double quotes; to represent a a double quote within the string
+ * then it must be escaped with a back slash: \". The following escape sequences
+ * are available:
+ * </p>
+ * <ul>
+ * <li>\t : tab</li>
+ * <li>\r : carriage return</li>
+ * <li>\f : form feed</li>
+ * <li>\b : bell</li>
+ * <li>\n : new line</li>
+ * <li>\" : "</li>
+ * <li>\' : ' (Not really needed)</li>
+ * <li>\\ : \</li>
+ * </ul>
  * <p>
- * Now consider the InvestigationType for which we need to specify the facility to which it belongs
- * and its name. The facility cannot be described by its id because we don't know what it is. So
- * instead we list in parentheses the field names that define it. So name:0 is the name of the
- * facility and name:1 is the name of the InvestigationType.
+ * True, false and null literals are not case sensitive. The last two fields of
+ * the facility are createId and createTime. If you specify that you want all
+ * attributes and you are a "root user" then the values of createId and
+ * createTime will be respected otherwise the current time is used and the id is
+ * that of the user doing the import. Timestamps literals follow ISO 8601 and
+ * support fractional seconds and time zones. If the time zone is omitted it is
+ * interpreted as local time.
  * <p>
- * The next line shows the convenience of this syntax. The investigation has a facility (identified
- * by its name:0) and the name:1 of the investigation and the visitId but it also has a type which
- * is identified a facility (identified by its name:0) and by the name:3 of the type. Finally it has
- * a title:4 field. Note that name:0 is used twice as in this case the investigation belongs to the
- * same facility as its type. This works fine as long as we deal with entity types which have key
- * fields. This is shown in the next snippet from an import file:
+ * Now consider the InvestigationType for which we need to specify the facility
+ * to which it belongs and its name. The facility cannot be described by its id
+ * because we don't know what it is. So instead we list in parentheses the field
+ * names that define it. So name:0 is the name of the facility and name:1 is the
+ * name of the InvestigationType.
+ * <p>
+ * The next line shows the convenience of this syntax. The investigation has a
+ * facility (identified by its name:0) and the name:1 of the investigation and
+ * the visitId but it also has a type which is identified a facility (identified
+ * by its name:0) and by the name:3 of the type. Finally it has a title:4 field.
+ * Note that name:0 is used twice as in this case the investigation belongs to
+ * the same facility as its type. This works fine as long as we deal with entity
+ * types which have key fields. This is shown in the next snippet from an import
+ * file:
  * <p>
  * 
  * <pre>
@@ -72,15 +94,16 @@ import java.util.List;
  * "Test port facility", "aprog", "1.2.3", "a", "b"
  * </pre>
  * 
- * Here we have the DataCollection which we imagine to be indentified by the anonymous variable "?".
- * This section of the file will create three DataCollection entries which we shall remember for the
- * duration of the import process as "a", "b" and "c".
+ * Here we have the DataCollection which we imagine to be indentified by the
+ * anonymous variable "?". This section of the file will create three
+ * DataCollection entries which we shall remember for the duration of the import
+ * process as "a", "b" and "c".
  * <p>
- * DataCollectionDatafiles are then associated with DataCollections "a" and "b" and a job is created
- * with one DataCollection as input and one as output.
+ * DataCollectionDatafiles are then associated with DataCollections "a" and "b"
+ * and a job is created with one DataCollection as input and one as output.
  * <p>
- * When performing export the same format is used however some values will be repeated - for example
- * the facility name will appear many times in most rows.
+ * When performing export the same format is used however some values will be
+ * repeated - for example the facility name will appear many times in most rows.
  */
 public class Session {
 
@@ -119,11 +142,12 @@ public class Session {
 	/**
 	 * Create ICAT entities from a Json String.
 	 * 
-	 * Note that this call is experimental and should not be relied upon to continue in its present
-	 * form.
+	 * Note that this call is experimental and should not be relied upon to
+	 * continue in its present form.
 	 * 
 	 * @param entities
-	 *            Json representation of ICAT entities and their related entities
+	 *            Json representation of ICAT entities and their related
+	 *            entities
 	 * 
 	 * @return the ids of the top level entities created
 	 * 
@@ -137,15 +161,18 @@ public class Session {
 	 * Export all metadata from ICAT.
 	 * 
 	 * @param attributes
-	 *            which attributes to export. If you don't plan to importMetaData as a "root user"
-	 *            there is no point in using {@link Attributes#ALL} and {@link Attributes#USER} is
-	 *            to be preferred.
+	 *            which attributes to export. If you don't plan to
+	 *            importMetaData as a "root user" there is no point in using
+	 *            {@link Attributes#ALL} and {@link Attributes#USER} is to be
+	 *            preferred.
 	 * 
-	 * @return an OutputStream. The structure of the OutputStream is described at {@link Session}
+	 * @return an OutputStream. The structure of the OutputStream is described
+	 *         at {@link Session}
 	 * 
 	 * @throws IcatException
 	 */
-	public InputStream exportMetaData(Attributes attributes) throws IcatException {
+	public InputStream exportMetaData(Attributes attributes)
+			throws IcatException {
 		return icat.exportMetaData(sessionId, null, attributes);
 	}
 
@@ -153,18 +180,21 @@ public class Session {
 	 * Export metadata from ICAT as specified in the query
 	 * 
 	 * @param query
-	 *            a normal ICAT query which may have an INCLUDE clause. This is used to define the
-	 *            metadata to export.
+	 *            a normal ICAT query which may have an INCLUDE clause. This is
+	 *            used to define the metadata to export.
 	 * @param attributes
-	 *            which attributes to export. If you don't plan to importMetaData as a "root user"
-	 *            there is no point in using {@link Attributes#ALL} and {@link Attributes#USER} is
-	 *            to be preferred.
+	 *            which attributes to export. If you don't plan to
+	 *            importMetaData as a "root user" there is no point in using
+	 *            {@link Attributes#ALL} and {@link Attributes#USER} is to be
+	 *            preferred.
 	 * 
-	 * @return an OutputStream. The structure of the OutputStream is described at {@link Session}
+	 * @return an OutputStream. The structure of the OutputStream is described
+	 *         at {@link Session}
 	 * 
 	 * @throws IcatException
 	 */
-	public InputStream exportMetaData(String query, Attributes attributes) throws IcatException {
+	public InputStream exportMetaData(String query, Attributes attributes)
+			throws IcatException {
 		return icat.exportMetaData(sessionId, query, attributes);
 	}
 
@@ -194,20 +224,21 @@ public class Session {
 	 * Import metadata into ICAT for a file specified by a Path
 	 * 
 	 * @param path
-	 *            the path of the import file. The structure of the import file is described at
-	 *            {@link Session}
+	 *            the path of the import file. The structure of the import file
+	 *            is described at {@link Session}
 	 * @param duplicateAction
 	 *            what to do when a duplicate is encountered
 	 * @param attributes
-	 *            which attributes to import. Only a "root user" can specify {@link Attributes#ALL}
-	 *            to respect those fields specified in the import file which are not settable by
-	 *            normal users: createId, createTime, modId and modTime. This is to allow an ICAT to
-	 *            be accurately exported and imported.
+	 *            which attributes to import. Only a "root user" can specify
+	 *            {@link Attributes#ALL} to respect those fields specified in
+	 *            the import file which are not settable by normal users:
+	 *            createId, createTime, modId and modTime. This is to allow an
+	 *            ICAT to be accurately exported and imported.
 	 * 
 	 * @throws IcatException
 	 */
-	public void importMetaData(Path path, DuplicateAction duplicateAction, Attributes attributes)
-			throws IcatException {
+	public void importMetaData(Path path, DuplicateAction duplicateAction,
+			Attributes attributes) throws IcatException {
 		icat.importMetaData(sessionId, path, duplicateAction, attributes);
 	}
 
@@ -232,8 +263,8 @@ public class Session {
 	/**
 	 * Carry out an ICAT search. The data are returned as a Json string
 	 * 
-	 * Note that this call is experimental and should not be relied upon to continue in its present
-	 * form.
+	 * Note that this call is experimental and should not be relied upon to
+	 * continue in its present form.
 	 * 
 	 * @param query
 	 *            a normal ICAT query with optional INCLUDE and LIMIT clauses.
@@ -249,8 +280,8 @@ public class Session {
 	/**
 	 * Carry out an ICAT get. The data are returned as a Json string
 	 * 
-	 * Note that this call is experimental and should not be relied upon to continue in its present
-	 * form.
+	 * Note that this call is experimental and should not be relied upon to
+	 * continue in its present form.
 	 * 
 	 * @param query
 	 *            a normal ICAT get query with an optional INCLUDE clause.

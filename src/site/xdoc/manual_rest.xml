@@ -15,7 +15,7 @@
 
             <p>
                 Most of the information about using the RESTful interface may be found in
-                <a href="apidocs/org/icatproject/icat/client/package-summary.html">javadoc.</a>
+                <a href="apidocs/org/icatproject/icat/client/package-summary.html">Javadoc.</a>
                 However to understand it you must first grasp the idea of ICAT by reading about the
                 <a href="manual_soap.html">SOAP based interface</a>
                 . The RESTful interface is currently experimental especially the create, search and get calls.
@@ -28,7 +28,7 @@
             </p>
 
             <p>
-                Installation and accessing from maven is explained in
+                Installation and accessing from Maven is explained in
                 <a href="installation.html">Java Client Installation.</a>
             </p>
 
