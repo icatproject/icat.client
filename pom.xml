@@ -11,18 +11,19 @@
 	<properties>
 		<wsdl>${basedir}/ICAT.wsdl</wsdl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.scm.id>icatproject/icat.client</project.scm.id>
 		<repoUrl>http://icatproject.org/mvn/repo</repoUrl>
 	</properties>
 
 	<issueManagement>
-		<url>http://code.google.com/p/icatproject/issues/list</url>
-		<system>Google Code</system>
+		<url>https://github.com/icatproject/icat.client/issues</url>
+		<system>GitHub</system>
 	</issueManagement>
 
 	<scm>
-		<connection>scm:svn:http://icatproject.googlecode.com/svn/icat/client/trunk</connection>
-		<developerConnection>scm:svn:https://icatproject.googlecode.com/svn/icat/client/trunk</developerConnection>
-		<url>http://code.google.com/p/icatproject/source/browse/#svn%2Ficat%2Fclient%2Ftrunk</url>
+		<connection>scm:git:https://github.com/icatproject/icat.client.git</connection>
+		<url>https://github.com/icatproject/icat.client</url>
 	</scm>
 
 	<licenses>
