@@ -9,7 +9,7 @@ For example:
 <p>
 <code> 
 &nbsp;&nbsp;&nbsp;&nbsp;ICAT icat = new ICAT("https://example.com:8181"));<br><br>
-&nbsp;&nbsp;&nbsp;&nbsp;Map<String, String> credentials = new HashMap<>();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Map&lt;String, String&gt; credentials = new HashMap&lt;&gt;();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;credentials.put("username", "fred");<br>
 &nbsp;&nbsp;&nbsp;&nbsp;credentials.put("password", "secret");<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Session session = icat.login("db", credentials);<br><br>

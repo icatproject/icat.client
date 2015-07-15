@@ -15,7 +15,6 @@ import java.util.List;
  * entity of that type.
  * <p>
  * For example:
- * <p>
  * 
  * <pre>
  * #  Version of file format
@@ -60,7 +59,7 @@ import java.util.List;
  * the facility are createId and createTime. If you specify that you want all
  * attributes and you are a "root user" then the values of createId and
  * createTime will be respected otherwise the current time is used and the id is
- * that of the user doing the import. Timestamps literals follow ISO 8601 and
+ * that of the user doing the import. Timestamp literals follow ISO 8601 and
  * support fractional seconds and time zones. If the time zone is omitted it is
  * interpreted as local time.
  * <p>
@@ -78,7 +77,6 @@ import java.util.List;
  * the same facility as its type. This works fine as long as we deal with entity
  * types which have key fields. This is shown in the next snippet from an import
  * file:
- * <p>
  * 
  * <pre>
  * DataCollection(?:0)
@@ -94,7 +92,7 @@ import java.util.List;
  * "Test port facility", "aprog", "1.2.3", "a", "b"
  * </pre>
  * 
- * Here we have the DataCollection which we imagine to be indentified by the
+ * Here we have the DataCollection which we imagine to be identified by the
  * anonymous variable "?". This section of the file will create three
  * DataCollection entries which we shall remember for the duration of the import
  * process as "a", "b" and "c".
@@ -152,6 +150,7 @@ public class Session {
 	 * @return the ids of the top level entities created
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public List<Long> create(String entities) throws IcatException {
 		return icat.create(sessionId, entities);
@@ -170,9 +169,9 @@ public class Session {
 	 *         at {@link Session}
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
-	public InputStream exportMetaData(Attributes attributes)
-			throws IcatException {
+	public InputStream exportMetaData(Attributes attributes) throws IcatException {
 		return icat.exportMetaData(sessionId, null, attributes);
 	}
 
@@ -192,9 +191,9 @@ public class Session {
 	 *         at {@link Session}
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
-	public InputStream exportMetaData(String query, Attributes attributes)
-			throws IcatException {
+	public InputStream exportMetaData(String query, Attributes attributes) throws IcatException {
 		return icat.exportMetaData(sessionId, query, attributes);
 	}
 
@@ -204,9 +203,19 @@ public class Session {
 	 * @return the time remaining
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public double getRemainingMinutes() throws IcatException {
 		return icat.getRemainingMinutes(sessionId);
+	}
+
+	/**
+	 * Return the sessionId
+	 * 
+	 * @return the sessionId
+	 */
+	public String getId() {
+		return sessionId;
 	}
 
 	/**
@@ -215,6 +224,7 @@ public class Session {
 	 * @return the user name
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public String getUserName() throws IcatException {
 		return icat.getUserName(sessionId);
@@ -236,9 +246,9 @@ public class Session {
 	 *            ICAT to be accurately exported and imported.
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
-	public void importMetaData(Path path, DuplicateAction duplicateAction,
-			Attributes attributes) throws IcatException {
+	public void importMetaData(Path path, DuplicateAction duplicateAction, Attributes attributes) throws IcatException {
 		icat.importMetaData(sessionId, path, duplicateAction, attributes);
 	}
 
@@ -246,6 +256,7 @@ public class Session {
 	 * Logout of the session after which the session cannot be re-used
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public void logout() throws IcatException {
 		icat.logout(sessionId);
@@ -255,6 +266,7 @@ public class Session {
 	 * Refresh the session and thereby reset the time remaining
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public void refresh() throws IcatException {
 		icat.refresh(sessionId);
@@ -272,6 +284,7 @@ public class Session {
 	 * @return the Json holding the results
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public String search(String query) throws IcatException {
 		return icat.search(sessionId, query);
@@ -292,6 +305,7 @@ public class Session {
 	 * @return the Json holding the result
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public String get(String query, long id) throws IcatException {
 		return icat.get(sessionId, query, id);

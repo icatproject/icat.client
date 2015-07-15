@@ -43,6 +43,8 @@ public class TestRS {
 		remainingMinutes = session.getRemainingMinutes();
 		session.refresh();
 		assertTrue(session.getRemainingMinutes() > remainingMinutes);
+		
+		System.out.println(session.search("Facility.id"));
 
 		long fid = Json
 				.createReader(new ByteArrayInputStream(session.search("Facility.id").getBytes()))

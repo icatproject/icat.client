@@ -43,13 +43,23 @@ import org.icatproject.icat.client.IcatException.IcatExceptionType;
 import org.icatproject.icat.client.Session.Attributes;
 import org.icatproject.icat.client.Session.DuplicateAction;
 
-/** Represents a RESTful ICAT instance for testing */
+/** Represents a RESTful ICAT instance from which sessions may be obtained. */
 public class ICAT {
 
 	private static final String basePath = "/icat";
 
 	private URI uri;
 
+	/**
+	 * Create a RESTful ICAT instance connected to the server at the specified
+	 * URI
+	 * 
+	 * @param urlString
+	 *            The URI of a server in the form https://example.com:443.
+	 * 
+	 * @throws URISyntaxException
+	 *             If the urlString is not a valid URI
+	 */
 	public ICAT(String urlString) throws URISyntaxException {
 		this.uri = new URI(urlString);
 	}
@@ -107,12 +117,10 @@ public class ICAT {
 			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
 			List<Long> result = new ArrayList<>();
 			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
-				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(getString(
-						response).getBytes()))) {
+				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(getString(response).getBytes()))) {
 					JsonParser.Event event = parser.next();
 					if (event != Event.START_ARRAY) {
-						throw new IcatException(IcatExceptionType.INTERNAL,
-								"Not a valid JSON array of longs");
+						throw new IcatException(IcatExceptionType.INTERNAL, "Not a valid JSON array of longs");
 					}
 					while (parser.hasNext()) {
 						event = parser.next();
@@ -122,8 +130,7 @@ public class ICAT {
 							return result;
 						}
 					}
-					throw new IcatException(IcatExceptionType.INTERNAL,
-							"Not a valid JSON array of longs");
+					throw new IcatException(IcatExceptionType.INTERNAL, "Not a valid JSON array of longs");
 				}
 			}
 		} catch (IOException e) {
@@ -137,8 +144,7 @@ public class ICAT {
 		if (entity != null) {
 			String error = EntityUtils.toString(entity);
 			if (!error.isEmpty()) {
-				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(error
-						.getBytes()))) {
+				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(error.getBytes()))) {
 					String code = null;
 					String message = null;
 					String key = "";
@@ -157,15 +163,13 @@ public class ICAT {
 					if (code != null && message != null) {
 						throw new IcatException(IcatExceptionType.valueOf(code), message);
 					}
-					throw new IcatException(IcatExceptionType.INTERNAL,
-							"No http entity expected in response " + error);
+					throw new IcatException(IcatExceptionType.INTERNAL, "No http entity expected in response " + error);
 				}
 			}
 		}
 	}
 
-	InputStream exportMetaData(String sessionId, String query, Attributes attributes)
-			throws IcatException {
+	InputStream exportMetaData(String sessionId, String query, Attributes attributes) throws IcatException {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		JsonGenerator gen = Json.createGenerator(baos);
@@ -262,8 +266,7 @@ public class ICAT {
 		checkStatus(response);
 		HttpEntity entity = response.getEntity();
 		if (entity == null) {
-			throw new IcatException(IcatExceptionType.INTERNAL,
-					"No http entity returned in response");
+			throw new IcatException(IcatExceptionType.INTERNAL, "No http entity returned in response");
 		}
 		return EntityUtils.toString(entity);
 	}
@@ -293,13 +296,12 @@ public class ICAT {
 		}
 	}
 
-	void importMetaData(String sessionId, Path path, DuplicateAction duplicate,
-			Attributes attributes) throws IcatException {
+	void importMetaData(String sessionId, Path path, DuplicateAction duplicate, Attributes attributes)
+			throws IcatException {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		JsonGenerator gen = Json.createGenerator(baos);
-		gen.writeStartObject().write("sessionId", sessionId)
-				.write("duplicate", duplicate.name().toLowerCase())
+		gen.writeStartObject().write("sessionId", sessionId).write("duplicate", duplicate.name().toLowerCase())
 				.write("attributes", attributes.name().toLowerCase()).writeEnd().close();
 
 		URI uri = getUri(getUriBuilder("port"));
@@ -307,12 +309,9 @@ public class ICAT {
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			InputStream stream = new BufferedInputStream(Files.newInputStream(path));
 
-			HttpEntity httpEntity = MultipartEntityBuilder
-					.create()
+			HttpEntity httpEntity = MultipartEntityBuilder.create()
 					.addPart("json", new StringBody(baos.toString(), ContentType.TEXT_PLAIN))
-					.addPart("file",
-							new InputStreamBody(stream, ContentType.APPLICATION_OCTET_STREAM, ""))
-					.build();
+					.addPart("file", new InputStreamBody(stream, ContentType.APPLICATION_OCTET_STREAM, "")).build();
 			HttpPost httpPost = new HttpPost(uri);
 			httpPost.setEntity(httpEntity);
 			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
@@ -334,6 +333,7 @@ public class ICAT {
 	 * @return A RESTful ICAT Session
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public Session login(String plugin, Map<String, String> credentials) throws IcatException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -359,6 +359,20 @@ public class ICAT {
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Obtain a session knowing a sessionId.
+	 * 
+	 * No check is made on the validity of the sessionId.
+	 * 
+	 * @param sessionId
+	 *            the sessionId to hold in the session.
+	 * 
+	 * @return the new session
+	 */
+	public Session getSession(String sessionId) {
+		return new Session(this, sessionId);
 	}
 
 	void logout(String sessionId) throws IcatException {
@@ -409,6 +423,7 @@ public class ICAT {
 	 * @return the version of the ICAT server
 	 * 
 	 * @throws IcatException
+	 *             For various ICAT errors
 	 */
 	public String getApiVersion() throws IcatException {
 		URI uri = getUri(getUriBuilder("version"));

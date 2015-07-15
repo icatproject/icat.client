@@ -15,13 +15,6 @@
             </p>
 
             <p>
-                You may also consult the
-                <a href="apidocs/index.html">javadoc.</a>
-                Please note that this is not very helpful as it is generated from machine generated source code derived from WSDL that contains no
-                comments.
-            </p>
-
-            <p>
                 Installation and accessing from maven is explained in
                 <a href="installation.html">Java Client Installation.</a>
             </p>

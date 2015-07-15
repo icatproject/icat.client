@@ -7,13 +7,25 @@
 	</properties>
 
 	<body>
+		<section name="4.6.0">
+			<p>Add getSession call
+			</p>
+			<ul>
+				<li>Add getSession call for when you know the sessionId.</li>
+				<li>Only the one package: org.icatproject is produced and not one of
+					the form org.icatproject_x_y_z.
+				</li>
+			</ul>
+
+		</section>
 
 		<section name="4.5.0">
 			<p>Fix typo and remove all Lucene calls.
 			</p>
 			<ul>
 				<li>All Lucene calls have been removed. The are planned to return in
-					release 4.6.0 but with new calls targeting TopCAT needs.</li>
+					release 4.6.0 but with new calls targeting TopCAT needs.
+				</li>
 			</ul>
 
 		</section>
