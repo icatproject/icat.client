@@ -23,6 +23,7 @@ public class TestRS {
 
 	@Test
 	public void testSession() throws Exception {
+		System.out.println(System.getProperty("serverUrl"));
 		ICAT icat = new ICAT(System.getProperty("serverUrl"));
 		Map<String, String> credentials = new HashMap<>();
 		credentials.put("username", "notroot");
@@ -43,19 +44,19 @@ public class TestRS {
 		remainingMinutes = session.getRemainingMinutes();
 		session.refresh();
 		assertTrue(session.getRemainingMinutes() > remainingMinutes);
-		
+
 		System.out.println(session.search("Facility.id"));
 
-		long fid = Json
-				.createReader(new ByteArrayInputStream(session.search("Facility.id").getBytes()))
-				.readArray().getJsonNumber(0).longValueExact();
+		long fid = Json.createReader(new ByteArrayInputStream(session.search("Facility.id").getBytes())).readArray()
+				.getJsonNumber(0).longValueExact();
 
-		JsonObject fac = Json
-				.createReader(new ByteArrayInputStream(session.get("Facility", fid).getBytes()))
+		JsonObject fac = Json.createReader(new ByteArrayInputStream(session.get("Facility", fid).getBytes()))
 				.readObject().getJsonObject("Facility");
 
 		System.out.println(icat.getApiVersion() + " " + fac.getString("name"));
-		
+
+		System.out.println("Properties + " + icat.getProperties());
+
 	}
 
 }

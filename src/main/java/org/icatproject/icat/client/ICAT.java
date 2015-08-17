@@ -438,4 +438,16 @@ public class ICAT {
 		}
 
 	}
+
+	public String getProperties() throws IcatException {
+		URI uri = getUri(getUriBuilder("properties"));
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
 }
