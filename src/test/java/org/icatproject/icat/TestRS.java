@@ -23,7 +23,6 @@ public class TestRS {
 
 	@Test
 	public void testSession() throws Exception {
-		System.out.println(System.getProperty("serverUrl"));
 		ICAT icat = new ICAT(System.getProperty("serverUrl"));
 		Map<String, String> credentials = new HashMap<>();
 		credentials.put("username", "notroot");
