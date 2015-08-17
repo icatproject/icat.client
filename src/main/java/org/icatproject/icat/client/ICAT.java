@@ -439,6 +439,32 @@ public class ICAT {
 
 	}
 
+	/**
+	 * Return a json string of properties.
+	 * 
+	 * For example (where no white space will be included):
+	 * 
+	 * <pre>
+	 * {"maxEntities":10000,
+	 * "lifetimeMinutes":120,
+	 * "authenticators":[
+	 * {"mnemonic":"db","description":{"keys":[{"name":"username"},{"name":"password","hide":true}]}},
+	 * {"mnemonic":"anon","description":{"keys":[]},"admin":true,"friendly":"Anonymous"}
+	 * ]}
+	 * </pre>
+	 * 
+	 * which shows the values of maxEntitites and lifetimeMinutes as as well as
+	 * the two available authenticators. The first which has a mnemonic of db in
+	 * the icat.properties file has two keys, the second of which, the password,
+	 * should not be shown. The second authenticator, anon, should only be
+	 * exposed to admin users and has a friendly name of "Anonymous". It is the
+	 * responsibility of application writers to use these fields as desired.
+	 * 
+	 * @return the json string
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors
+	 */
 	public String getProperties() throws IcatException {
 		URI uri = getUri(getUriBuilder("properties"));
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
