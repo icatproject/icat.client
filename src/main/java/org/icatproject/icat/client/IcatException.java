@@ -16,10 +16,14 @@ public class IcatException extends Exception {
 		NO_SUCH_OBJECT_FOUND,
 		/** An object already exists with the same key fields */
 		OBJECT_ALREADY_EXISTS,
-		/** This is normally an authentication problem or the session has expired */
+		/**
+		 * This is normally an authentication problem or the session has expired
+		 */
 		SESSION,
 		/** If the call is not appropriate for the system in the current state */
-		VALIDATION
+		VALIDATION,
+		/** If no implementation is provided by the server */
+		NOT_IMPLEMENTED
 	}
 
 	private IcatExceptionType type;
@@ -41,7 +45,8 @@ public class IcatException extends Exception {
 	}
 
 	/**
-	 * Return the offset in "many" calls. If the offset has not been set this will return -1
+	 * Return the offset in "many" calls. If the offset has not been set this
+	 * will return -1
 	 * 
 	 * @return the offset
 	 */
