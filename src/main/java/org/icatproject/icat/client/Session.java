@@ -2,6 +2,7 @@ package org.icatproject.icat.client;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -298,7 +299,6 @@ public class Session {
 	 * 
 	 * @param query
 	 *            a normal ICAT get query with an optional INCLUDE clause.
-	 * 
 	 * @param id
 	 *            the id of the entity to be returned
 	 * 
@@ -309,6 +309,96 @@ public class Session {
 	 */
 	public String get(String query, long id) throws IcatException {
 		return icat.get(sessionId, query, id);
+	}
+
+	/**
+	 * Return a set of investigations satisfying the constraints
+	 * 
+	 * @param user
+	 *            If not null must exactly match the name of a user related via
+	 *            the investigation user to the investigation.
+	 * @param text
+	 *            If not null a text search (with ANDs ORs etc) for any text in
+	 *            the investigation fields.
+	 * @param lower
+	 *            If not null investigation end date must be greater than or
+	 *            equal to this.
+	 * @param upper
+	 *            If not null investigation start date must be less than or equal
+	 *            to this.
+	 * @param parameters
+	 *            If not null all the parameters must match.
+	 * @param samples
+	 *            If not null all the specified samples, using a text search
+	 *            (with ANDs ORs etc) must be related to the investigation.
+	 * @param userFullName
+	 *            If not null a text search is made against the full name of a
+	 *            user related via the investigation user to the investigation.
+	 * @param maxResults
+	 *            The maximum number of results to return.
+	 * 
+	 * @return the Json holding the result.
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors.
+	 */
+	public String searchInvestigations(String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
+			throws IcatException {
+		return icat.searchInvestigations(sessionId, user, text, lower, upper, parameters, samples, userFullName,
+				maxResults);
+	}
+	
+	/**
+	 * Return a set of datasets satisfying the constraints
+	 * 
+	 * @param user
+	 *            If not null must exactly match the name of a user related via
+	 *            the investigation user and the investigation to the data set.
+	 * @param text
+	 *            If not null a text search (with ANDs ORs etc) for any text in
+	 *            the data set fields.
+	 * @param lower
+	 *            If not null data set end date must be greater than or
+	 *            equal to this.
+	 * @param upper
+	 *            If not null data set start date must be less than or equal
+	 *            to this.
+	 * @param parameters
+	 *            If not null all the parameters must match.
+	 * @param maxResults
+	 *            The maximum number of results to return.
+	 * 
+	 * @return the Json holding the result.
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors.
+	 */
+	public String searchDatasets(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
+			int maxResults) throws IcatException {
+		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, maxResults);
+	}
+
+	public void luceneClear() throws IcatException {
+		icat.luceneClear(sessionId);
+	}
+
+	public void luceneCommit() throws IcatException {
+		icat.luceneCommit(sessionId);
+	}
+
+	public void lucenePopulate(String entityName) throws IcatException {
+		icat.lucenePopulate(sessionId, entityName);
+	}
+
+	public List<String> luceneGetPopulating() throws IcatException {
+		return icat.luceneGetPopulating(sessionId);
+	}
+
+	public String searchDatafiles(String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, int maxResults) throws IcatException {
+		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters,
+				maxResults);
 	}
 
 }

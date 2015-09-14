@@ -15,6 +15,7 @@
 				<li>Only the one package: org.icatproject is produced and not one of
 					the form org.icatproject_x_y_z.
 				</li>
+				<li>Add new lucene calls to replace those removed in 4.5.0</li>
 			</ul>
 
 		</section>

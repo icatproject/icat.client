@@ -14,6 +14,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.scm.id>github</project.scm.id>
 		<repoUrl>http://icatproject.org/mvn/repo</repoUrl>
+		<luceneVersion>4.10.2</luceneVersion>
 	</properties>
 
 	<scm>
@@ -53,6 +54,12 @@
 	</distributionManagement>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${luceneVersion}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax</groupId>

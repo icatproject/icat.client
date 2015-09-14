@@ -5,16 +5,23 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.json.Json;
+import javax.json.JsonException;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonString;
+import javax.json.JsonValue;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 import javax.json.stream.JsonParser.Event;
@@ -39,6 +46,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.apache.lucene.document.DateTools;
+import org.apache.lucene.document.DateTools.Resolution;
 import org.icatproject.icat.client.IcatException.IcatExceptionType;
 import org.icatproject.icat.client.Session.Attributes;
 import org.icatproject.icat.client.Session.DuplicateAction;
@@ -436,6 +445,123 @@ public class ICAT {
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
+	}
+
+	String searchInvestigations(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
+			throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("lucene/data");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", "Investigation");
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+			}
+			if (upper != null) {
+				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			if (samples != null && !samples.isEmpty()) {
+				gen.writeStartArray("samples");
+				for (String sample : samples) {
+					gen.write(sample);
+				}
+				gen.writeEnd();
+			}
+			if (userFullName != null) {
+				gen.write("userFullName", userFullName);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("maxCount", Integer.toString(maxResults));
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+
+		}
+	}
+
+	String searchDatasets(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, int maxResults) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("lucene/data");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", "Dataset");
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+			}
+			if (upper != null) {
+				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("maxCount", Integer.toString(maxResults));
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+
+		}
+	}
+
+	private void writeParameters(JsonGenerator gen, List<ParameterForLucene> parameters) {
+		gen.writeStartArray("parameters");
+		for (ParameterForLucene parameter : parameters) {
+			gen.writeStartObject();
+			if (parameter.getName() != null) {
+				gen.write("name", parameter.getName());
+			}
+			if (parameter.getUnits() != null) {
+				gen.write("units", parameter.getUnits());
+			}
+			if (parameter.getStringValue() != null) {
+				gen.write("stringValue", parameter.getStringValue());
+			} else if (parameter.getLowerDateValue() != null && parameter.getUpperDateValue() != null) {
+				gen.write("lowerDateValue", DateTools.dateToString(parameter.getLowerDateValue(), Resolution.MINUTE));
+				gen.write("upperDateValue", DateTools.dateToString(parameter.getUpperDateValue(), Resolution.MINUTE));
+			} else if (parameter.getLowerNumericValue() != null && parameter.getUpperNumericValue() != null) {
+				gen.write("lowerNumericValue", parameter.getLowerNumericValue());
+				gen.write("upperNumericValue", parameter.getUpperNumericValue());
+			}
+			gen.writeEnd();
+		}
+		gen.writeEnd();
 
 	}
 
@@ -474,6 +600,117 @@ public class ICAT {
 			}
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	void luceneClear(String sessionId) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("lucene/db");
+		uriBuilder.setParameter("sessionId", sessionId);
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpDelete httpDelete = new HttpDelete(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpDelete)) {
+				expectNothing(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	void luceneCommit(String sessionId) throws IcatException {
+		URI uri = getUri(getUriBuilder("lucene/db"));
+		List<NameValuePair> formparams = new ArrayList<>();
+		formparams.add(new BasicNameValuePair("sessionId", sessionId));
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpPost httpPost = new HttpPost(uri);
+			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
+			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+				expectNothing(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	List<String> luceneGetPopulating(String sessionId) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("lucene/db");
+		uriBuilder.setParameter("sessionId", sessionId);
+		URI uri = getUri(uriBuilder);
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				String result = getString(response);
+				try (JsonReader jsonReader = Json.createReader(new StringReader(result))) {
+					JsonObject rootNode = jsonReader.readObject();
+					List<String> entityNames = new ArrayList<>();
+					for (JsonValue num : rootNode.getJsonArray("entityNames")) {
+						String id = ((JsonString) num).getString();
+						entityNames.add(id);
+					}
+					return entityNames;
+				}
+			}
+		} catch (IOException | JsonException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	void lucenePopulate(String sessionId, String entityName) throws IcatException {
+		URI uri = getUri(getUriBuilder("lucene/db/" + entityName));
+		List<NameValuePair> formparams = new ArrayList<>();
+		formparams.add(new BasicNameValuePair("sessionId", sessionId));
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpPost httpPost = new HttpPost(uri);
+			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
+			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+				expectNothing(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	String searchDatafiles(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, int maxResults) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("lucene/data");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", "Datafile");
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+			}
+			if (upper != null) {
+				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("maxCount", Integer.toString(maxResults));
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+
 		}
 	}
 }
