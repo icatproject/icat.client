@@ -8,7 +8,7 @@
 
 	<body>
 		<section name="4.6.0">
-			<p>Add getSession call
+			<p>Improvements to the RESTful interface.
 			</p>
 			<ul>
 				<li>Add getSession call for when you know the sessionId.</li>
@@ -16,6 +16,12 @@
 					the form org.icatproject_x_y_z.
 				</li>
 				<li>Add new lucene calls to replace those removed in 4.5.0</li>
+				<li>Make it build against a WildFly server as well as Glassfish.
+				</li>
+				<li>Delete call added.</li>
+				<li>Write call added which replaces create and also provides update
+					functionality.</li>
+				<li>Provide protection against generating too large URLs.</li>
 			</ul>
 
 		</section>

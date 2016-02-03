@@ -147,7 +147,12 @@
 								<wsdlUrl>${wsdl}</wsdlUrl>
 							</wsdlUrls>
 							<sourceDestDir>
-								${project.build.directory}/generated-sources/other</sourceDestDir>
+								${project.build.directory}/generated-sources/other
+							</sourceDestDir>
+							<!-- Hack for JDK8 because of bug in plugin? -->
+							<vmArgs>
+								<vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
+							</vmArgs>
 						</configuration>
 					</execution>
 				</executions>

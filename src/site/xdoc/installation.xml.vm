@@ -69,7 +69,12 @@
                     &#160;&#160;&#160;&#160;&#160;&#160;&lt;version&gt;${project.version}&lt;/version&gt;
                     <br />
                     &#160;&#160;&#160;&lt;/dependency&gt;
-                    <br />
+                    <br /> <br />
+                    &nbsp;&nbsp;&nbsp;&lt;dependency&gt; <br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;javax.json&lt;/artifactId&gt;<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;1.0.4&lt;/version&gt;<br/>
+                    &nbsp;&nbsp;&nbsp;&lt;/dependency&gt;<br/>
                     &#160;&#160;&#160;...
                     <br />
                     &lt;/dependencies&gt;

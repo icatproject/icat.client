@@ -141,22 +141,56 @@ public class Session {
 	}
 
 	/**
-	 * Create ICAT entities from a Json String.
+	 * Write (create or update) ICAT entities from a Json String.
 	 * 
 	 * Note that this call is experimental and should not be relied upon to
 	 * continue in its present form.
 	 * 
 	 * @param entities
 	 *            Json representation of ICAT entities and their related
-	 *            entities
+	 *            entities. If there is only one, the outer "[" "]" may be
+	 *            omitted.
 	 * 
 	 * @return the ids of the top level entities created
 	 * 
 	 * @throws IcatException
 	 *             For various ICAT errors
 	 */
+	public List<Long> write(String entities) throws IcatException {
+		return icat.write(sessionId, entities);
+	}
+
+	/**
+	 * Create ICAT entities from a Json String.
+	 * 
+	 * @deprecated Replace by {@link #write(String)}
+	 * @param entities
+	 *            Json representation of ICAT entities and their related
+	 *            entities. If there is only one, the outer "[" "]" may be
+	 *            omitted.
+	 * 
+	 * @return the ids of the top level entities created
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors
+	 */
+	@Deprecated
 	public List<Long> create(String entities) throws IcatException {
-		return icat.create(sessionId, entities);
+		return icat.write(sessionId, entities);
+	}
+
+	/**
+	 * Delete ICAT entities specified by a Json String.
+	 * 
+	 * @param entities
+	 *            Json representation of ICAT entities. If there is only one the
+	 *            outer "[" "]" may be omitted.
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors
+	 */
+	public void delete(String entities) throws IcatException {
+		icat.delete(sessionId, entities);
 	}
 
 	/**
@@ -394,7 +428,8 @@ public class Session {
 	/**
 	 * Clear the lucene database
 	 * 
-	 * @throws IcatException For various ICAT errors.
+	 * @throws IcatException
+	 *             For various ICAT errors.
 	 */
 	public void luceneClear() throws IcatException {
 		icat.luceneClear(sessionId);
@@ -403,7 +438,8 @@ public class Session {
 	/**
 	 * Force a commit of the lucene database
 	 * 
-	 * @throws IcatException For various ICAT errors.
+	 * @throws IcatException
+	 *             For various ICAT errors.
 	 */
 	public void luceneCommit() throws IcatException {
 		icat.luceneCommit(sessionId);
@@ -415,7 +451,8 @@ public class Session {
 	 * @param entityName
 	 *            the name of the entity
 	 * 
-	 * @throws IcatException For various ICAT errors.
+	 * @throws IcatException
+	 *             For various ICAT errors.
 	 */
 	public void lucenePopulate(String entityName) throws IcatException {
 		icat.lucenePopulate(sessionId, entityName);
@@ -426,7 +463,8 @@ public class Session {
 	 * 
 	 * @return list of class names
 	 * 
-	 * @throws IcatException For various ICAT errors.
+	 * @throws IcatException
+	 *             For various ICAT errors.
 	 */
 	public List<String> luceneGetPopulating() throws IcatException {
 		return icat.luceneGetPopulating(sessionId);
@@ -448,7 +486,8 @@ public class Session {
 	 *            If not null data file date must be greater than or equal to
 	 *            this.
 	 * @param upper
-	 *            If not null data file date must be less than or equal to thilist of class namess.
+	 *            If not null data file date must be less than or equal to
+	 *            thilist of class namess.
 	 * @param parameters
 	 *            If not null all the parameters must match.
 	 * @param maxResults

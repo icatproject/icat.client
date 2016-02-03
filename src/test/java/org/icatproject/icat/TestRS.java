@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
-import javax.json.JsonObject;
 
 import org.icatproject.icat.client.ICAT;
 import org.icatproject.icat.client.IcatException;
@@ -44,17 +43,11 @@ public class TestRS {
 		session.refresh();
 		assertTrue(session.getRemainingMinutes() > remainingMinutes);
 
-		System.out.println(session.search("Facility.id"));
-
 		long fid = Json.createReader(new ByteArrayInputStream(session.search("Facility.id").getBytes())).readArray()
 				.getJsonNumber(0).longValueExact();
 
-		JsonObject fac = Json.createReader(new ByteArrayInputStream(session.get("Facility", fid).getBytes()))
-				.readObject().getJsonObject("Facility");
-
-		System.out.println(icat.getApiVersion() + " " + fac.getString("name"));
-
-		System.out.println("Properties + " + icat.getProperties());
+		Json.createReader(new ByteArrayInputStream(session.get("Facility", fid).getBytes())).readObject()
+				.getJsonObject("Facility");
 
 	}
 

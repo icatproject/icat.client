@@ -87,11 +87,11 @@ public class ICAT {
 			} else {
 				error = EntityUtils.toString(entity);
 			}
-
 			try (JsonParser parser = Json.createParser(new ByteArrayInputStream(error.getBytes()))) {
 				String code = null;
 				String message = null;
 				String key = "";
+				int offset = -1;
 				while (parser.hasNext()) {
 					JsonParser.Event event = parser.next();
 					if (event == Event.KEY_NAME) {
@@ -99,9 +99,12 @@ public class ICAT {
 					} else if (event == Event.VALUE_STRING) {
 						if (key.equals("code")) {
 							code = parser.getString();
-						}
-						if (key.equals("message")) {
+						} else if (key.equals("message")) {
 							message = parser.getString();
+						}
+					} else if (event == Event.VALUE_NUMBER) {
+						if (key.equals("offset")) {
+							offset = parser.getInt();
 						}
 					}
 				}
@@ -109,14 +112,15 @@ public class ICAT {
 				if (code == null || message == null) {
 					throw new IcatException(IcatExceptionType.INTERNAL, error);
 				}
-				throw new IcatException(IcatExceptionType.valueOf(code), message);
+				throw new IcatException(IcatExceptionType.valueOf(code), message, offset);
 			} catch (JsonParsingException e) {
 				throw new IcatException(IcatExceptionType.INTERNAL, error);
 			}
 		}
+
 	}
 
-	List<Long> create(String sessionId, String entities) throws IcatException {
+	List<Long> write(String sessionId, String entities) throws IcatException {
 		URI uri = getUri(getUriBuilder("entityManager"));
 		List<NameValuePair> formparams = new ArrayList<>();
 		formparams.add(new BasicNameValuePair("sessionId", sessionId));
@@ -126,6 +130,7 @@ public class ICAT {
 			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
 			List<Long> result = new ArrayList<>();
 			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+				checkStatus(response);
 				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(getString(response).getBytes()))) {
 					JsonParser.Event event = parser.next();
 					if (event != Event.START_ARRAY) {
@@ -147,6 +152,21 @@ public class ICAT {
 		}
 	}
 
+	void delete(String sessionId, String entities) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("entityManager");
+		uriBuilder.setParameter("sessionId", sessionId);
+		uriBuilder.setParameter("entities", entities);
+		URI uri = getUri(uriBuilder);
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpDelete httpDelete = new HttpDelete(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpDelete)) {
+				expectNothing(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
 	private void expectNothing(CloseableHttpResponse response) throws IcatException, IOException {
 		checkStatus(response);
 		HttpEntity entity = response.getEntity();
@@ -154,24 +174,6 @@ public class ICAT {
 			String error = EntityUtils.toString(entity);
 			if (!error.isEmpty()) {
 				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(error.getBytes()))) {
-					String code = null;
-					String message = null;
-					String key = "";
-					while (parser.hasNext()) {
-						JsonParser.Event event = parser.next();
-						if (event == Event.KEY_NAME) {
-							key = parser.getString();
-						} else if (event == Event.VALUE_STRING) {
-							if (key.equals("code")) {
-								code = parser.getString();
-							} else if (key.equals("message")) {
-								message = parser.getString();
-							}
-						}
-					}
-					if (code != null && message != null) {
-						throw new IcatException(IcatExceptionType.valueOf(code), message);
-					}
 					throw new IcatException(IcatExceptionType.INTERNAL, "No http entity expected in response " + error);
 				}
 			}
@@ -282,7 +284,12 @@ public class ICAT {
 
 	private URI getUri(URIBuilder uriBuilder) throws IcatException {
 		try {
-			return uriBuilder.build();
+			URI uri = uriBuilder.build();
+			if (uri.toString().length() > 2048) {
+				throw new IcatException(IcatExceptionType.BAD_PARAMETER,
+						"Generated URI is of length " + uri.toString().length() + " which exceeds 2048");
+			}
+			return uri;
 		} catch (URISyntaxException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
@@ -449,7 +456,7 @@ public class ICAT {
 
 	String searchInvestigations(String sessionId, String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
-			throws IcatException {
+					throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("lucene/data");
 		uriBuilder.setParameter("sessionId", sessionId);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -713,4 +720,5 @@ public class ICAT {
 
 		}
 	}
+
 }
