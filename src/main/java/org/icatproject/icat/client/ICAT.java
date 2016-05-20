@@ -243,7 +243,7 @@ public class ICAT {
 		}
 	}
 
-	private String getFromJson(String input, String sought) throws IcatException {
+	private String getStringFromJson(String input, String sought) throws IcatException {
 		try (JsonParser parser = Json.createParser(new ByteArrayInputStream(input.getBytes()))) {
 			String key = "";
 			while (parser.hasNext()) {
@@ -260,13 +260,34 @@ public class ICAT {
 		}
 	}
 
+	private boolean getBooleanFromJson(String input, String sought) throws IcatException {
+		try (JsonParser parser = Json.createParser(new ByteArrayInputStream(input.getBytes()))) {
+			String key = "";
+			while (parser.hasNext()) {
+				JsonParser.Event event = parser.next();
+				if (event == Event.KEY_NAME) {
+					key = parser.getString();
+				} else if (event == Event.VALUE_TRUE) {
+					if (key.equals(sought)) {
+						return true;
+					}
+				} else if (event == Event.VALUE_FALSE) {
+					if (key.equals(sought)) {
+						return false;
+					}
+				}
+			}
+			throw new IcatException(IcatExceptionType.INTERNAL, "No " + sought + " in " + input);
+		}
+	}
+
 	double getRemainingMinutes(String sessionId) throws IcatException {
 		URI uri = getUri(getUriBuilder("session/" + sessionId));
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			HttpGet httpGet = new HttpGet(uri);
 			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
 				String responseString = getString(response);
-				return Double.parseDouble(getFromJson(responseString, "remainingMinutes"));
+				return Double.parseDouble(getStringFromJson(responseString, "remainingMinutes"));
 			}
 		} catch (IOException | NumberFormatException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
@@ -305,7 +326,7 @@ public class ICAT {
 			HttpGet httpGet = new HttpGet(uri);
 			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
 				String responseString = getString(response);
-				return getFromJson(responseString, "userName");
+				return getStringFromJson(responseString, "userName");
 			}
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
@@ -340,6 +361,31 @@ public class ICAT {
 	}
 
 	/**
+	 * See whether or not someone is logged in.
+	 * 
+	 * @param userName
+	 *            which must include mnemonic if the authenticator plugin is
+	 *            configured to return them.
+	 * 
+	 * @return true if at least one session exists else false.
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors
+	 */
+	public boolean isLoggedIn(String userName) throws IcatException {
+		URI uri = getUri(getUriBuilder("user/" + userName));
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				String responseString = getString(response);
+				return getBooleanFromJson(responseString, "loggedIn");
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	/**
 	 * Login to a RESTful ICAT instance and return a Session
 	 * 
 	 * @param plugin
@@ -369,7 +415,7 @@ public class ICAT {
 			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
 			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
 				String responseString = getString(response);
-				String sessionId = getFromJson(responseString, "sessionId");
+				String sessionId = getStringFromJson(responseString, "sessionId");
 				return new Session(this, sessionId);
 			}
 		} catch (IOException e) {
@@ -447,7 +493,7 @@ public class ICAT {
 			HttpGet httpGet = new HttpGet(uri);
 			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
 				String responseString = getString(response);
-				return getFromJson(responseString, "version");
+				return getStringFromJson(responseString, "version");
 			}
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
@@ -456,7 +502,7 @@ public class ICAT {
 
 	String searchInvestigations(String sessionId, String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
-					throws IcatException {
+			throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("lucene/data");
 		uriBuilder.setParameter("sessionId", sessionId);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();

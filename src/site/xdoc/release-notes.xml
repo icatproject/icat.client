@@ -7,6 +7,18 @@
 	</properties>
 
 	<body>
+
+		<section name="4.7.0">
+			<p>Added isloggedIn call etc.</p>
+			<ul>
+				<li>Added isLoggedIn call to determine whether or not someone is
+					logged in. It returns true if the user has one or more sessions.
+				</li>
+				<li>Moved to version 5.3.0 of lucene</li>
+				<li>Removed description of old searchText() call.</li>
+			</ul>
+		</section>
+
 		<section name="4.6.0">
 			<p>Improvements to the RESTful interface.
 			</p>
@@ -20,7 +32,8 @@
 				</li>
 				<li>Delete call added.</li>
 				<li>Write call added which replaces create and also provides update
-					functionality.</li>
+					functionality.
+				</li>
 				<li>Provide protection against generating too large URLs.</li>
 			</ul>
 

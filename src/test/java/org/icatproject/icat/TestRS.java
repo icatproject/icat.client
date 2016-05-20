@@ -1,6 +1,7 @@
 package org.icatproject.icat;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -23,6 +24,8 @@ public class TestRS {
 	@Test
 	public void testSession() throws Exception {
 		ICAT icat = new ICAT(System.getProperty("serverUrl"));
+		assertFalse(icat.isLoggedIn("mnemonic/rubbish"));
+		assertFalse(icat.isLoggedIn("rubbish"));
 		Map<String, String> credentials = new HashMap<>();
 		credentials.put("username", "notroot");
 		credentials.put("password", "password");
@@ -30,7 +33,9 @@ public class TestRS {
 		assertEquals("db/notroot", session.getUserName());
 		double remainingMinutes = session.getRemainingMinutes();
 		assertTrue(remainingMinutes > 119 && remainingMinutes < 120);
+		assertTrue(icat.isLoggedIn("db/notroot"));
 		session.logout();
+
 		try {
 			session.getRemainingMinutes();
 			fail();
