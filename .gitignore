@@ -6,3 +6,4 @@
 /.settings/
 /release.properties
 /pom.xml.releaseBackup
+/.pydevproject
