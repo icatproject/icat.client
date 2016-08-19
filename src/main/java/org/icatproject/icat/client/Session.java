@@ -143,9 +143,6 @@ public class Session {
 	/**
 	 * Write (create or update) ICAT entities from a Json String.
 	 * 
-	 * Note that this call is experimental and should not be relied upon to
-	 * continue in its present form.
-	 * 
 	 * @param entities
 	 *            Json representation of ICAT entities and their related
 	 *            entities. If there is only one, the outer "[" "]" may be
@@ -300,7 +297,7 @@ public class Session {
 	}
 
 	/**
-	 * Refresh the session and thereby reset the time remaining
+	 * Refresh the session by resetting the time remaining
 	 * 
 	 * @throws IcatException
 	 *             For various ICAT errors
@@ -343,6 +340,7 @@ public class Session {
 	 * @throws IcatException
 	 *             For various ICAT errors
 	 */
+	@Deprecated
 	public String get(String query, long id) throws IcatException {
 		return icat.get(sessionId, query, id);
 	}
@@ -388,7 +386,7 @@ public class Session {
 	 */
 	public String searchInvestigations(String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
-					throws IcatException {
+			throws IcatException {
 		return icat.searchInvestigations(sessionId, user, text, lower, upper, parameters, samples, userFullName,
 				maxResults);
 	}
