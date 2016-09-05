@@ -260,6 +260,23 @@ public class ICAT {
 		}
 	}
 
+	private long getLongFromJson(String input, String sought) throws IcatException {
+		try (JsonParser parser = Json.createParser(new ByteArrayInputStream(input.getBytes()))) {
+			String key = "";
+			while (parser.hasNext()) {
+				JsonParser.Event event = parser.next();
+				if (event == Event.KEY_NAME) {
+					key = parser.getString();
+				} else if (event == Event.VALUE_NUMBER) {
+					if (key.equals(sought)) {
+						return parser.getLong();
+					}
+				}
+			}
+			throw new IcatException(IcatExceptionType.INTERNAL, "No " + sought + " in " + input);
+		}
+	}
+
 	private boolean getBooleanFromJson(String input, String sought) throws IcatException {
 		try (JsonParser parser = Json.createParser(new ByteArrayInputStream(input.getBytes()))) {
 			String key = "";
@@ -765,6 +782,35 @@ public class ICAT {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 
 		}
+	}
+
+	long cloneEntity(String sessionId, String name, long id, Map<String, String> keys) throws IcatException {
+		URI uri = getUri(getUriBuilder("cloner"));
+		List<NameValuePair> formparams = new ArrayList<>();
+		formparams.add(new BasicNameValuePair("sessionId", sessionId));
+		formparams.add(new BasicNameValuePair("name", name));
+		formparams.add(new BasicNameValuePair("id", Long.toString(id)));
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			for (Entry<String, String> entry : keys.entrySet()) {
+				gen.write(entry.getKey(), entry.getValue());
+			}
+			gen.writeEnd();
+		}
+		formparams.add(new BasicNameValuePair("keys", baos.toString()));
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpPost httpPost = new HttpPost(uri);
+			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
+			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+				String responseString = getString(response);
+				return getLongFromJson(responseString, "id");
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+
 	}
 
 }

@@ -126,32 +126,39 @@ class IcatTest(unittest.TestCase):
             self.session.delete(f)
         self.assertEquals([0], self.session.search("SELECT COUNT(f) FROM Facility f"))
         
+    def testClone(self):
+        self.assertEquals([1], self.session.search("SELECT COUNT(f) FROM Facility f"))
+        self.assertEquals([3], self.session.search("SELECT COUNT(inv) FROM Investigation inv"))
+        fid = self.session.search("SELECT f.id FROM Facility f")[0]
+        newfid = self.session.cloneEntity("Facility", fid, {"name": "newName"})
+        self.assertNotEqual(fid, newfid)
+        self.assertEquals([2], self.session.search("SELECT COUNT(f) FROM Facility f"))
+        self.assertEquals([6], self.session.search("SELECT COUNT(inv) FROM Investigation inv"))
+        
     def testPorter(self):
         dump = self.session.exportMetaData()
         self.assertTrue(dump.startswith("# ICAT Export file"))
-        f = self.session.search("SELECT f.id, f.name, COUNT(f) FROM Facility f")[0]
+        f = self.session.search("SELECT f.id, f.description, COUNT(f) FROM Facility f")[0]
         fid = f[0]
-        fName = f[1]
         c = f[2]
         self.assertEquals(1, c)
         
-        facility = {"id":fid, "title" : "Updated"}
+        facility = {"id":fid, "description" : "Updated"}
         entity = {"Facility" : facility}
         self.session.write(entity)
         
-        f = self.session.search("SELECT f.id, f.name, COUNT(f) FROM Facility f")[0] 
+        f = self.session.search("SELECT f.id, f.description, COUNT(f) FROM Facility f")[0] 
         self.assertEquals(fid, f[0])
         self.assertEquals("Updated", f[1])
         self.assertEquals(1, c)
         
         
-        self.session.importMetaData(dump, duplicate=Session.CHECK)
+        self.session.importMetaData(dump, duplicate=Session.OVERWRITE)
         
-        f = self.session.search("SELECT f.id, f.name, COUNT(f) FROM Facility f")[0] 
+        f = self.session.search("SELECT f.id, f.description, COUNT(f) FROM Facility f")[0] 
         self.assertEquals(fid, f[0])
-        self.assertEquals("Updated", f[1])
+        self.assertIsNone(f[1])
         self.assertEquals(1, c)
-        
         
 if __name__ == '__main__':
     unittest.main()

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
+import javax.json.stream.JsonParser;
 
 import org.icatproject.icat.client.ICAT;
 import org.icatproject.icat.client.IcatException;

@@ -151,6 +151,11 @@ class ICAT(object):
         self._check(r)
         return r.json()
     
+    def _clone(self, sessionId, name, idValue, keys):
+        r = requests.post(self.uri + "cloner", data={"sessionId":sessionId, "name":name, "id":idValue, "keys":json.dumps(keys)}, verify=self.cert)
+        self._check(r)
+        return r.json()["id"]
+    
     def _export(self, sessionId, query, attributes):
         parms = {"sessionId":sessionId}
         if query: parms["query"] = query
@@ -166,7 +171,7 @@ class ICAT(object):
         if duplicate: parms["duplicate"] = duplicate
         if attributes: parms["attributes"] = attributes
         
-        fields= {}
+        fields = {}
         fields['json'] = json.dumps(parms)
         fields['file'] = ('filename', data, 'application/octet-stream')     
         m = MultipartEncoder(fields=fields)
@@ -326,6 +331,18 @@ class Session(object):
         """  
         return self.icat._write(self.sessionId, entities)
     
+    def cloneEntity(self, name, idValue, keys):
+        """  
+        Clone an entity and return the id of the clone
+     
+        name is the name of the type of entity and idValue is the id value of the entity to be cloned
+     
+        keys is a dict with mappings from field names to values to be different in the clone
+
+        the id of the clone is returned
+        """
+        return self.icat._clone(self.sessionId, name, idValue, keys)
+        
     ALL = "ALL"
     USER = "USER"
  

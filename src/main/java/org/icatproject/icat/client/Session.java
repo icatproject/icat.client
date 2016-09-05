@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A RESTful ICAT session.
@@ -340,7 +341,6 @@ public class Session {
 	 * @throws IcatException
 	 *             For various ICAT errors
 	 */
-	@Deprecated
 	public String get(String query, long id) throws IcatException {
 		return icat.get(sessionId, query, id);
 	}
@@ -469,7 +469,6 @@ public class Session {
 	}
 
 	/**
-	 * 
 	 * Return a set of data files satisfying the constraints
 	 * 
 	 * @param user
@@ -499,6 +498,25 @@ public class Session {
 	public String searchDatafiles(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			int maxResults) throws IcatException {
 		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, maxResults);
+	}
+
+	/**
+	 * Clone an entity and return the id of the clone
+	 * 
+	 * @param name
+	 *            the name of the type of entity
+	 * @param id
+	 *            the id value of the entity to be cloned
+	 * @param keys
+	 *            a map of field names and values to be different in the clone
+
+	 * @return the id of the clone
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors.
+	 */
+	public long cloneEntity(String name, long id, Map<String, String> keys) throws IcatException {
+		return icat.cloneEntity(sessionId, name, id, keys);
 	}
 
 }

@@ -7,7 +7,12 @@
 		<h1>ICAT Client Release Notes</h1>
 
 		<h2>4.8.0</h2>
-		<p>Provide Rest API calls in Python</p>
+		<p>Improvements to the Rest API</p>
+		<ul>
+			<li>Provide Rest API calls in Python</li>
+			<li>Add the cloneEntity call to the Rest API in both Python and Java
+			</li>
+		</ul>
 
 		<h2>4.7.0</h2>
 		<p>Added isloggedIn call etc.</p>

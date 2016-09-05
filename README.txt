@@ -1,8 +1,8 @@
 icat.client: Clients for ICAT
 -----------------------------
 
-General installation instructions are at http://icatproject.org/installation/component
+General installation instructions are at https://icatproject.org/installation/component
 
-Specific installation instructions are at http://icatproject.org/mvn/site/icat/client/${project.version}/installation.html
+Specific installation instructions are at https://repo.icatproject.org/site/icat/client/${project.version}/installation.html
 
-All documentation on icat.client may be found at http://icatproject.org/mvn/site/icat/client/${project.version}
+All documentation on icat.client may be found at https://repo.icatproject.org/site/icat/client/${project.version}
