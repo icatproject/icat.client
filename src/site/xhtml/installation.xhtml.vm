@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>ICAT Clients Installation</title>
+</head>
+
+
+
+<body>
+
+	<h1>ICAT Clients Installation</h1>
+
+
+
+	<p>Note that the setup script only installs the Python client as
+		there is no standard place to install jar files.</p>
+
+
+	<h2>Installation of python client using the setup script</h2>
+
+	<p>
+		The setup script makes use of the pip program. Recent versions of the
+		pip program will, if you don't run as root, install to a local area.
+		Typically you will want to install for everyone so you should normally
+		run the script as root. Please follow <a
+			href="http://icatproject.org/installation/component/"> the
+			generic installation instructions</a> If you have problems then try
+		running
+		<code>pip install *.whl</code>
+		from the unpacked distribution directory.
+	</p>
+
+
+	<h3>Compatibility</h3>
+	<p>For full functionality you need an icat.server version 4.8.0 or
+		greater. The restful clients will work with earlier releases of the
+		icat.server except that individual calls will fail if not supported by
+		the server. The SOAP interface will work with icat.server 4.7.0 and
+		4.8.0</p>
+
+	<h3>Prerequisites</h3>
+
+	<ul>
+
+		<li>The icat client distribution: <a
+			href="${repoUrl}/org/icatproject/icat.client/${project.version}/icat.client-${project.version}-distro.zip">icat.client-${project.version}-distro.zip</a>
+		</li>
+
+		<li>A deployed icat server. This is not necessary for deployment
+			but it will be required subsequently to use the client.</li>
+
+		<li>Python (version 2.4 to 2.7)</li>
+		<li>pip. It is suggested that you use the pip version provided by
+			your OS distribution though it's unlikely to be the latest.</li>
+	</ul>
+
+	<h3>Check that it works</h3>
+	<p>If the server is secure then the following, after possibly
+		produce a warning message about an unverified https request, will
+		print a version string for the server:</p>
+	<p>
+		<code>echo 'import
+			icat;print icat.ICAT("https://&lt;hostname&gt;:8181", False).getVersion()'
+			| python</code>
+	</p>
+	<p>If insecure then the following should produce the version
+		string.</p>
+	<code>echo 'import
+		icat;print icat.ICAT("http://&lt;hostname&gt;:8080").getVersion()' python</code>
+	<p>In case of problems look in the server.log and the icat.log in
+		the logs directory of your icat server.</p>
+
+	<h2>Java clients</h2>
+
+	<p>There are two files that should be made available to those
+		wishing to use the ICAT client:</p>
+	<dl>
+		<dt>
+			<a
+				href="${repoUrl}/org/icatproject/icat.client/${project.version}/icat.client-${project.version}.jar">icat.client-${project.version}.jar</a>
+		</dt>
+		<dd>the client library which the user should add to the
+			classpath.</dd>
+		<dt>
+			<a
+				href="${repoUrl}/org/icatproject/icat.client/${project.version}/icat.client-${project.version}-sources.jar">icat.client-${project.version}-sources.jar</a>
+		</dt>
+		<dd>the source code of the client, which is especially useful
+			when developing within an IDE.</dd>
+	</dl>
+
+	<h3>Using the Java client from maven</h3>
+	<p>It is expected that most people will express their dependency
+		upon the icat.client by means of a maven pom file. To do this the user
+		needs to define the repository and express the dependency as indicated
+		in the snippet below:</p>
+
+	<code>
+		&lt;repositories&gt; <br /> &#160;&#160;&#160;&lt;repository&gt; <br />
+		&#160;&#160;&#160;&#160;&#160;&#160;&lt;id&gt;ICAT Repo&lt;/id&gt; <br />
+		&#160;&#160;&#160;&#160;&#160;&#160;&lt;url&gt;http://www.icatproject.org/mvn/repo&lt;/url&gt;
+		<br /> &#160;&#160;&#160;&#160;&#160;&#160;&lt;snapshots&gt; <br />
+		&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;enabled&gt;false&lt;/enabled&gt;
+		<br /> &#160;&#160;&#160;&#160;&#160;&#160;&lt;/snapshots&gt; <br />
+		&#160;&#160;&#160;&lt;/repository&gt; <br /> &#160;&#160;&#160;... <br />
+		&lt;/repositories&gt; <br /> <br /> &lt;dependencies&gt; <br />
+		&#160;&#160;&#160;&lt;dependency&gt; <br />
+		&#160;&#160;&#160;&#160;&#160;&#160;&lt;groupId&gt;org.icatproject&lt;/groupId&gt;
+		<br />
+		&#160;&#160;&#160;&#160;&#160;&#160;&lt;artifactId&gt;icat.client&lt;/artifactId&gt;
+		<br />
+		&#160;&#160;&#160;&#160;&#160;&#160;&lt;version&gt;${project.version}&lt;/version&gt;
+		<br /> &#160;&#160;&#160;&lt;/dependency&gt; <br /> <br />
+		&nbsp;&nbsp;&nbsp;&lt;dependency&gt; <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;javax.json&lt;/artifactId&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;1.0.4&lt;/version&gt;<br />
+		&nbsp;&nbsp;&nbsp;&lt;/dependency&gt;<br /> &#160;&#160;&#160;... <br />
+		&lt;/dependencies&gt;
+	</code>
+</body>
+</html>

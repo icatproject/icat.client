@@ -130,7 +130,12 @@ class ICAT(object):
         self._check(r)
         
     def _search(self, sessionId, query):
-        r = requests.get(self.uri + "entityManager", params={"sessionId":sessionId, "query" : query}, verify=self.cert)
+        r = requests.get(self.uri + "entityManager", params={"sessionId":sessionId, "query":query}, verify=self.cert)
+        self._check(r)
+        return r.json()  
+    
+    def _get(self, sessionId, query, idValue):
+        r = requests.get(self.uri + "entityManager", params={"sessionId":sessionId, "query":query, "id":idValue}, verify=self.cert)
         self._check(r)
         return r.json()  
     
@@ -149,7 +154,7 @@ class ICAT(object):
         """
         r = requests.get(self.uri + "version", verify=self.cert)
         self._check(r)
-        return r.json()
+        return r.json()["version"]
     
     def _clone(self, sessionId, name, idValue, keys):
         r = requests.post(self.uri + "cloner", data={"sessionId":sessionId, "name":name, "id":idValue, "keys":json.dumps(keys)}, verify=self.cert)
@@ -238,6 +243,18 @@ class Session(object):
         """
         return self.icat._search(self.sessionId, query)
     
+    def get(self, query, idValue):
+        """
+        Carry out an ICAT get of the entity with the specified idValue and return the result.
+    
+        The query might be just the name of the entity type. For example the query
+        
+        "Facility" will return the facility specified by the idValue
+        
+        The INCLUDE keyword can also be used as in "Dataset ds INCLUDE ds.datafiles"
+        """
+        return self.icat._get(self.sessionId, query, idValue)
+    
     def delete(self, entities):
         """
         Delete ICAT entities from nested lists and dicts.
@@ -250,7 +267,7 @@ class Session(object):
         
         For example to delete an Investigation:
         
-        entity = {"Investigation" : {"id" : dsid}}
+        entity = {"Investigation" : {"id" : invid}}
         self.session.delete(entity)
         
         Remember that all to-many relationships will be followed so, in this case,

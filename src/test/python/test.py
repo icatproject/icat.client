@@ -7,11 +7,14 @@ from icat import ICAT, IcatException, Session
 class IcatTest(unittest.TestCase):
     
     def setUp(self):
-        self.icat = ICAT(os.environ["serverUrl"], os.environ["serverCert"])
+        self.icat = ICAT(os.environ["serverUrl"], False)
         self.session = self.icat.login("db", {"username":"root", "password":"password"})
-        for fid in self.session.search("SELECT f.id from Facility f"):
-            f = {"Facility": {"id" : fid}}
-            self.session.delete(f)
+        
+        for et in ["Facility", "DataCollection", "Study", "Rule", "User", "Grouping", "PublicStep"]:
+            for xid in self.session.search("SELECT x.id from " + et + " x"):
+                x = {et: {"id" : xid}}
+                self.session.delete(x)
+ 
         facility = {}
         facility["name"] = "Test Facility"
         entity = {"Facility":facility}
@@ -39,11 +42,11 @@ class IcatTest(unittest.TestCase):
         self.session.write(entity)
         
     def testInfo(self):
-        version = self.icat.getVersion()["version"]
+        version = self.icat.getVersion()
         self.assertTrue(version.startswith("4.8"))
  
     def testSession(self):
-        icat = ICAT(os.environ["serverUrl"], os.environ["serverCert"])
+        icat = ICAT(os.environ["serverUrl"], False)
         self.assertFalse(icat.isLoggedIn("mnemonic/rubbish"))
         self.assertFalse(icat.isLoggedIn("rubbish"))
         credentials = {}
@@ -86,6 +89,13 @@ class IcatTest(unittest.TestCase):
         self.assertEquals([3], self.session.search("SELECT COUNT(df) FROM Datafile df"))
         self.assertEquals(["Test Facility"], self.session.search("SELECT df.dataset.investigation.facility.name FROM Datafile df WHERE df.name = 'df3'"))
         
+    def testGet(self):
+        fid = self.session.search("SELECT f.id FROM Facility f")[0]
+        f = self.session.get("Facility", fid)
+        self.assertEquals(0, len(f["Facility"]["investigations"]))
+        
+        f = self.session.get("Facility f INCLUDE f.investigations", fid) 
+        self.assertEquals(3, len(f["Facility"]["investigations"]))
         
     def testSearch(self):
         fid = self.session.search("SELECT f.id FROM Facility f")[0]

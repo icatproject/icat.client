@@ -15,7 +15,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;Session session = icat.login("db", credentials);<br><br>
 &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(session.getUserName());<br>
 &nbsp;&nbsp;&nbsp;&nbsp;System.out.println(session.getRemainingMinutes());<br>
-&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(session.search("Facility")<br>
+&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(session.search("Facility");<br>
 &nbsp;&nbsp;&nbsp;&nbsp;session.logout();<br>
 </code>
  * <p>

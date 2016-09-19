@@ -504,7 +504,29 @@ public class ICAT {
 	 * @throws IcatException
 	 *             For various ICAT errors
 	 */
+	@Deprecated
 	public String getApiVersion() throws IcatException {
+		URI uri = getUri(getUriBuilder("version"));
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				String responseString = getString(response);
+				return getStringFromJson(responseString, "version");
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Return the version of the ICAT server
+	 * 
+	 * @return the version of the ICAT server
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors
+	 */
+	public String getVersion() throws IcatException {
 		URI uri = getUri(getUriBuilder("version"));
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			HttpGet httpGet = new HttpGet(uri);
