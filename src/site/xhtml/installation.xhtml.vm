@@ -58,14 +58,14 @@
 		produce a warning message about an unverified https request, will
 		print a version string for the server:</p>
 	<p>
-		<code>echo 'import
-			icat;print icat.ICAT("https://&lt;hostname&gt;:8181", False).getVersion()'
-			| python</code>
+		<code>echo 'import icat;print
+			icat.ICAT("https://&lt;hostname&gt;:8181", False).getVersion()' |
+			python</code>
 	</p>
 	<p>If insecure then the following should produce the version
 		string.</p>
-	<code>echo 'import
-		icat;print icat.ICAT("http://&lt;hostname&gt;:8080").getVersion()' python</code>
+	<code>echo 'import icat;print
+		icat.ICAT("http://&lt;hostname&gt;:8080").getVersion()' python</code>
 	<p>In case of problems look in the server.log and the icat.log in
 		the logs directory of your icat server.</p>
 
