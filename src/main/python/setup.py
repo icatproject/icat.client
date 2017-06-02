@@ -11,7 +11,7 @@ with open(path.join(here, "..", "..", "..", 'README.txt'), encoding='utf-8') as 
 setup(
     name='icat',
 
-    version='4.8.0',
+    version='4.9.0',
 
     description='A sample Python project',
     long_description=long_description,

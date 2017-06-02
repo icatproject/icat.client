@@ -424,7 +424,7 @@ public class Session {
 	}
 
 	/**
-	 * Clear the lucene database
+	 * Clear the lucene populating list
 	 * 
 	 * @throws IcatException
 	 *             For various ICAT errors.
@@ -444,7 +444,7 @@ public class Session {
 	}
 
 	/**
-	 * Clear and repopulate lucene documents for the specified entityName
+	 * Clear and repopulate lucene documents for the specified entityName.
 	 * 
 	 * @param entityName
 	 *            the name of the entity
@@ -452,8 +452,8 @@ public class Session {
 	 * @throws IcatException
 	 *             For various ICAT errors.
 	 */
-	public void lucenePopulate(String entityName) throws IcatException {
-		icat.lucenePopulate(sessionId, entityName);
+	public void lucenePopulate(String entityName, long minid) throws IcatException {
+		icat.lucenePopulate(sessionId, entityName, minid);
 	}
 
 	/**
@@ -509,7 +509,7 @@ public class Session {
 	 *            the id value of the entity to be cloned
 	 * @param keys
 	 *            a map of field names and values to be different in the clone
-
+	 * 
 	 * @return the id of the clone
 	 * 
 	 * @throws IcatException
@@ -517,6 +517,31 @@ public class Session {
 	 */
 	public long cloneEntity(String name, long id, Map<String, String> keys) throws IcatException {
 		return icat.cloneEntity(sessionId, name, id, keys);
+	}
+
+	/**
+	 * Wait for the specified number of milliseconds and return.
+	 * 
+	 * This is only used in testing
+	 * 
+	 * @param ms
+	 *            number of milliseconds to wait
+	 * 
+	 * @throws IcatException
+	 *             For various ICAT errors.
+	 */
+	public void waitMillis(long ms) throws IcatException {
+		icat.waitMillis(sessionId, ms);
+	}
+
+	/**
+	 * 
+	 * @param path input path to find contents of
+	 * @return json describing the contents
+	 * @throws IcatException 
+	 */
+	public String list(String path) throws IcatException {
+		return icat.list(sessionId, path);
 	}
 
 }

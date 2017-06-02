@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 
 import javax.json.Json;
 import javax.json.JsonException;
-import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.JsonValue;
@@ -517,7 +516,7 @@ public class ICAT {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Return the version of the ICAT server
 	 * 
@@ -555,6 +554,7 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
+				// TODO Remove DateTools as it is from a Lucene library!
 				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
 			}
 			if (upper != null) {
@@ -734,14 +734,13 @@ public class ICAT {
 			HttpGet httpGet = new HttpGet(uri);
 			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
 				String result = getString(response);
+				List<String> rvalues = new ArrayList<>();
 				try (JsonReader jsonReader = Json.createReader(new StringReader(result))) {
-					JsonObject rootNode = jsonReader.readObject();
-					List<String> entityNames = new ArrayList<>();
-					for (JsonValue num : rootNode.getJsonArray("entityNames")) {
-						String id = ((JsonString) num).getString();
-						entityNames.add(id);
+					for (JsonValue jv : jsonReader.readArray()) {
+						JsonString o = (JsonString) jv;
+						rvalues.add(o.getString());
 					}
-					return entityNames;
+					return rvalues;
 				}
 			}
 		} catch (IOException | JsonException e) {
@@ -749,8 +748,8 @@ public class ICAT {
 		}
 	}
 
-	void lucenePopulate(String sessionId, String entityName) throws IcatException {
-		URI uri = getUri(getUriBuilder("lucene/db/" + entityName));
+	void lucenePopulate(String sessionId, String entityName, long minid) throws IcatException {
+		URI uri = getUri(getUriBuilder("lucene/db/" + entityName + "/" + minid));
 		List<NameValuePair> formparams = new ArrayList<>();
 		formparams.add(new BasicNameValuePair("sessionId", sessionId));
 
@@ -802,7 +801,6 @@ public class ICAT {
 			}
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
-
 		}
 	}
 
@@ -833,6 +831,37 @@ public class ICAT {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
 
+	}
+
+	public void waitMillis(String sessionId, long ms) throws IcatException {
+		URI uri = getUri(getUriBuilder("waitMillis"));
+		List<NameValuePair> formparams = new ArrayList<>();
+		formparams.add(new BasicNameValuePair("sessionId", sessionId));
+		formparams.add(new BasicNameValuePair("ms", Long.toString(ms)));
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpPost httpPost = new HttpPost(uri);
+			httpPost.setEntity(new UrlEncodedFormEntity(formparams));
+			try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
+				expectNothing(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	public String list(String sessionId, String path) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("list");
+		uriBuilder.setParameter("sessionId", sessionId);
+		uriBuilder.setParameter("path", path);
+		URI uri = getUri(uriBuilder);
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
 	}
 
 }
