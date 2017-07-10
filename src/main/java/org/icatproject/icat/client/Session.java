@@ -535,7 +535,6 @@ public class Session {
 	}
 
 	/**
-	 * 
 	 * @param path input path to find contents of
 	 * @return json describing the contents
 	 * @throws IcatException 
