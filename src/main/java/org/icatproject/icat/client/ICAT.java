@@ -671,7 +671,7 @@ public class ICAT {
 	 * ]}
 	 * </pre>
 	 * 
-	 * which shows the values of maxEntitites and lifetimeMinutes as as well as
+	 * which shows the values of maxEntities and lifetimeMinutes as as well as
 	 * the two available authenticators. The first which has a mnemonic of db in
 	 * the icat.properties file has two keys, the second of which, the password,
 	 * should not be shown. The second authenticator, anon, should only be
