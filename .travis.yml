@@ -15,4 +15,5 @@ install:
  - sudo apt-get update
  - sudo apt-get install -y ansible
  - git clone https://github.com/brunocanning/icat-ansible.git
- - ansible-playbook --connection=local 127.0.0.1 icat-ansible/site.yml
+ - echo "[icat-test-host]\nlocalhost ansible_connection=local" > hosts
+ - ansible-playbook --inventory ./hosts icat-ansible/icat-test-hosts.yml
