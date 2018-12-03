@@ -14,5 +14,5 @@ install:
  - sudo pip install wheel
  - sudo pip install ansible 
  - git clone https://github.com/brunocanning/icat-ansible.git
- - echo -e "[icat-test-host]\nlocalhost ansible_connection=local" > hosts
+ - echo -e "[icat-test-hosts]\nlocalhost ansible_connection=local" > hosts
  - ansible-playbook --inventory ./hosts icat-ansible/icat-test-hosts.yml
