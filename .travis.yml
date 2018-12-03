@@ -10,8 +10,8 @@ cache:
     - $HOME/.m2
 
 install:
- - pip install requests-toolbelt
- - pip install wheel
+ - pip install --user requests-toolbelt
+ - pip install --user wheel
  - sudo apt-get update
  - sudo apt-get install -y ansible
  - git clone https://github.com/brunocanning/icat-ansible.git
