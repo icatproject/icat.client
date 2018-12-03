@@ -10,10 +10,9 @@ cache:
     - $HOME/.m2
 
 install:
- - pip install --user requests-toolbelt
- - pip install --user wheel
- - sudo apt-get update
- - sudo apt-get install -y ansible
+ - sudo pip install requests-toolbelt
+ - sudo pip install wheel
+ - sudo pip install ansible 
  - git clone https://github.com/brunocanning/icat-ansible.git
  - echo -e "[icat-test-host]\nlocalhost ansible_connection=local" > hosts
  - ansible-playbook --inventory ./hosts icat-ansible/icat-test-hosts.yml
