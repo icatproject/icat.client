@@ -9,4 +9,10 @@ cache:
   directories:
     - $HOME/.m2
 
-install: true
+install:
+ - pip install requests-toolbelt
+ - pip install wheel
+ - sudo apt-get update
+ - sudo apt-get install -y ansible
+ - git clone https://github.com/brunocanning/icat-ansible.git
+ - ansible-playbook --connection=local 127.0.0.1 site.yml
