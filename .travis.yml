@@ -15,4 +15,4 @@ install:
  - sudo apt-get update
  - sudo apt-get install -y ansible
  - git clone https://github.com/brunocanning/icat-ansible.git
- - ansible-playbook --connection=local 127.0.0.1 site.yml
+ - ansible-playbook --connection=local 127.0.0.1 icat-ansible/site.yml
