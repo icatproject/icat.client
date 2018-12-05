@@ -17,4 +17,5 @@ install:
  - sudo apt-get update
  - git clone https://github.com/brunocanning/icat-ansible.git
  - echo -e "[icat-test-hosts]\nlocalhost ansible_connection=local" > hosts
- - ansible-playbook --inventory ./hosts icat-ansible/icat-test-hosts.yml
+ - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
+ - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-test-hosts.yml
