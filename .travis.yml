@@ -18,3 +18,4 @@ install:
  - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
  - mv vault.yml icat-ansible/group_vars/all
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-dev-base-hosts.yml
+ - sudo su - glassfish
