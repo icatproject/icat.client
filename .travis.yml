@@ -13,7 +13,8 @@ install:
  - sudo pip install requests-toolbelt wheel ansible pycrypto
  - sudo add-apt-repository universe
  - sudo apt-get update
- - sudo update-ca-certificates -f
+ - sudo apt-get install ca-certificates-java
+ - sudo /var/lib/dpkg/info/ca-certificates-java.postinst configure
  - git clone -b icat-dev-install-role https://github.com/louise-davies/icat-ansible.git
  - echo -e "[icat-dev-base-hosts]\nlocalhost ansible_connection=local" > hosts
  - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
