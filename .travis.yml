@@ -10,9 +10,6 @@ cache:
     - $HOME/.m2
 
 install:
- - java -version
- - echo $JAVA_HOME
- - sudo update-java-alternatives --set java-1.8.0-openjdk-amd64
  - sudo pip install requests-toolbelt wheel ansible pycrypto
  - sudo add-apt-repository universe
  - sudo apt-get update
@@ -21,6 +18,5 @@ install:
  - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
  - mv vault.yml icat-ansible/group_vars/all
  - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" icat-ansible/group_vars/all/vars.yml'
- - 'sed -i -e "s/^payara_version: ''4.1.2.181''/payara_version: ''5.182''/" icat-ansible/roles/payara/defaults/main.yml'
- - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts -vvv icat-ansible/icat-dev-base-hosts.yml
+ - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-dev-base-hosts.yml
 
