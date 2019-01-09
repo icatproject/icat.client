@@ -20,5 +20,5 @@ install:
  - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
  - mv vault.yml icat-ansible/group_vars/all
  - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" icat-ansible/group_vars/all/vars.yml'
- - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-dev-base-hosts.yml
+ - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts -vvv icat-ansible/icat-dev-base-hosts.yml
 
