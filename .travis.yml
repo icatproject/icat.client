@@ -12,7 +12,7 @@ cache:
 install:
  - java -version
  - echo $JAVA_HOME
- - update-java-alternatives --set java-1.8.0-openjdk
+ - sudo update-java-alternatives --set java-1.8.0-openjdk-amd64
  - sudo pip install requests-toolbelt wheel ansible pycrypto
  - sudo add-apt-repository universe
  - sudo apt-get update
