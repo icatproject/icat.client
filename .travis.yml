@@ -10,7 +10,7 @@ cache:
     - $HOME/.m2
 
 install:
- - sudo pip install requests-toolbelt wheel ansible pycrypto
+ - sudo pip install wheel ansible pycrypto
  - sudo add-apt-repository universe
  - sudo apt-get update
  - git clone -b icat-dev-install-role https://github.com/louise-davies/icat-ansible.git
