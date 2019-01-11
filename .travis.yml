@@ -1,7 +1,6 @@
 language: java
 jdk:
   - openjdk8
-  - openjdk11
 
 dist: xenial
 
@@ -19,6 +18,3 @@ install:
  - mv vault.yml icat-ansible/group_vars/all
  - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" icat-ansible/group_vars/all/vars.yml'
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-dev-base-hosts.yml
-
-script:
- - mvn -X -e install
