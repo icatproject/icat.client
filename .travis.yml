@@ -19,5 +19,4 @@ install:
  - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" icat-ansible/group_vars/all/vars.yml'
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-test-hosts.yml
  
- script:
- - 'mvn -DserverUrl=$(hostname) test -B'
+ script: 'mvn -DserverUrl=$(hostname) test -B'
