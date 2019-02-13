@@ -20,4 +20,4 @@ install:
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-ansible/icat-test-hosts.yml
  
  script:
- - mvn -DserverUrl=$(hostname) test -B
+ - 'mvn -DserverUrl=$(hostname) test -B'
