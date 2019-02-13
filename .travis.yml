@@ -13,7 +13,7 @@ install:
  - sudo add-apt-repository universe
  - sudo apt-get update
  - git clone https://github.com/icatproject-contrib/icat-ansible.git
- - echo -e "[icat-dev-base-hosts]\nlocalhost ansible_connection=local" > hosts
+ - echo -e "[icat-test-hosts]\nlocalhost ansible_connection=local" > hosts
  - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
  - mv vault.yml icat-ansible/group_vars/all
  - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" icat-ansible/group_vars/all/vars.yml'
