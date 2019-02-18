@@ -20,5 +20,6 @@ install:
  - mv ../icat-client-dev-hosts.yml .
  - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" ./group_vars/all/vars.yml'
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat-client-dev-hosts.yml
+ - cd ..
  
 script: 'mvn -DserverUrl=https://$(hostname):8181 test -B'
