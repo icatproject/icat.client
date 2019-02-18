@@ -15,8 +15,8 @@ install:
  - git clone https://github.com/icatproject-contrib/icat-ansible.git
  - echo -e "[icat-client-dev-hosts]\nlocalhost ansible_connection=local" > hosts
  - echo -e $ANSIBLE_VAULT_PASSWORD > vault_pass.txt
- - mv vault.yml icat-ansible/group_vars/all
- - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" icat-ansible/group_vars/all/vars.yml'
+ - mv vault.yml ./icat-ansible/group_vars/all
+ - 'sed -i -e "s/^payara_user: ''glassfish''/payara_user: ''travis''/" ./icat-ansible/group_vars/all/vars.yml'
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts icat-client-dev-hosts.yml
  
 script: 'mvn -DserverUrl=https://$(hostname):8181 test -B'

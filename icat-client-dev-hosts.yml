@@ -2,15 +2,15 @@
 - hosts: icat-client-dev-hosts
   become: true
   vars_files:
-    - 'group_vars/all/vars.yml'
+    - './icat-ansible/group_vars/all/vars.yml'
   roles:
-    - role: common
-    - role: java
-    - role: mariadb
-    - role: icatdb
-    - role: payara
-    - role: authn-simple
-    - role: authn-db
-    - role: icat-lucene
-    - role: dev-common
-    - role: icat-server
+    - role: ./icat-ansible/roles/common
+    - role: ./icat-ansible/roles/java
+    - role: ./icat-ansible/roles/mariadb
+    - role: ./icat-ansible/roles/icatdb
+    - role: ./icat-ansible/roles/payara
+    - role: ./icat-ansible/roles/authn-simple
+    - role: ./icat-ansible/roles/authn-db
+    - role: ./icat-ansible/roles/icat-lucene
+    - role: ./icat-ansible/roles/dev-common
+    - role: ./icat-ansible/roles/icat-server
