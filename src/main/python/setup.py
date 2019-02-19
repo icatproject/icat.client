@@ -5,13 +5,13 @@ from os import path
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, "..", "..", "..", 'README.txt'), encoding='utf-8') as f:
+with open(path.join(here, "..", "..", "..", 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
     
 setup(
     name='icat',
 
-    version='4.9.0',
+    version='4.10.0-SNAPSHOT',
 
     description='A sample Python project',
     long_description=long_description,
