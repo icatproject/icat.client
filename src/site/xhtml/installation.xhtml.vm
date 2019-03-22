@@ -97,7 +97,7 @@
 	<code>
 		&lt;repositories&gt; <br /> &#160;&#160;&#160;&lt;repository&gt; <br />
 		&#160;&#160;&#160;&#160;&#160;&#160;&lt;id&gt;ICAT Repo&lt;/id&gt; <br />
-		&#160;&#160;&#160;&#160;&#160;&#160;&lt;url&gt;http://www.icatproject.org/mvn/repo&lt;/url&gt;
+		&#160;&#160;&#160;&#160;&#160;&#160;&lt;url&gt;${repoUrl}&lt;/url&gt;
 		<br /> &#160;&#160;&#160;&#160;&#160;&#160;&lt;snapshots&gt; <br />
 		&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&lt;enabled&gt;false&lt;/enabled&gt;
 		<br /> &#160;&#160;&#160;&#160;&#160;&#160;&lt;/snapshots&gt; <br />
