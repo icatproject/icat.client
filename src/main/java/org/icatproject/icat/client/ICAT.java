@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class ICAT {
 			if (entity == null) {
 				throw new IcatException(IcatExceptionType.INTERNAL, "No explanation provided");
 			} else {
-				error = EntityUtils.toString(entity);
+				error = EntityUtils.toString(entity, Charset.defaultCharset());
 			}
 			try (JsonParser parser = Json.createParser(new ByteArrayInputStream(error.getBytes()))) {
 				String code = null;
@@ -170,7 +171,7 @@ public class ICAT {
 		checkStatus(response);
 		HttpEntity entity = response.getEntity();
 		if (entity != null) {
-			String error = EntityUtils.toString(entity);
+			String error = EntityUtils.toString(entity, Charset.defaultCharset());
 			if (!error.isEmpty()) {
 				try (JsonParser parser = Json.createParser(new ByteArrayInputStream(error.getBytes()))) {
 					throw new IcatException(IcatExceptionType.INTERNAL, "No http entity expected in response " + error);
@@ -316,7 +317,7 @@ public class ICAT {
 		if (entity == null) {
 			throw new IcatException(IcatExceptionType.INTERNAL, "No http entity returned in response");
 		}
-		return EntityUtils.toString(entity);
+		return EntityUtils.toString(entity, Charset.defaultCharset());
 	}
 
 	private URI getUri(URIBuilder uriBuilder) throws IcatException {
