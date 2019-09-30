@@ -6,6 +6,12 @@
 
 	<h1>ICAT Client Release Notes</h1>
 
+	<h2>4.10.1</h2>
+	<p>Fix bug in character encoding</p>
+	<ul>
+		<li>The toString(HttpEntity entity) method falls back to the ISO-8859-1 character encoding by default which causes issues with non-ASCII characters. This fix replaces the calls of this method with the extended toString method which uses the system's default encoding instead.</li>
+	</ul>
+
 	<h2>4.10.0</h2>
 	<p>Support 4.10.0 server</p>
 	<ul>
