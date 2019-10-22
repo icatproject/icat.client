@@ -14,7 +14,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.scm.id>github</project.scm.id>
 		<repoUrl>https://repo.icatproject.org/repo/</repoUrl>
-		<luceneVersion>5.3.0</luceneVersion>
+		<luceneVersion>7.1.0</luceneVersion>
 	</properties>
 
 	<repositories>
