@@ -18,7 +18,7 @@ install:
  - echo -e "icattravispw" > vault_pass.txt
  - mv ../vault.yml ./group_vars/all
  - mv ../icat-client-dev-hosts.yml .
- - 'sed -i -e "s/^payara_user: \"glassfish\"/payara_user: \"travis\"/" icat-ansible/group_vars/all/vars.yml'
+ - 'sed -i -e "s/^payara_user: \"glassfish\"/payara_user: \"travis\"/" ./group_vars/all/vars.yml'
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat-client-dev-hosts.yml
  - cd ..
  
