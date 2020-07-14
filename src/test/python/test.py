@@ -57,19 +57,19 @@ class IcatTest(unittest.TestCase):
         remainingMinutes = session.getRemainingMinutes()
         self.assertTrue(remainingMinutes > 119 and remainingMinutes < 120)
         self.assertTrue(icat.isLoggedIn("db/notroot"))
-        session.logout();
+        session.logout()
 
         try:
-            session.getRemainingMinutes();
-            self.fail();
+            session.getRemainingMinutes()
+            self.fail()
         except IcatException as e:
-            self.assertEqual(IcatException.SESSION, e.getType());
+            self.assertEqual(IcatException.SESSION, e.getType())
 
-        session = icat.login("db", credentials);
-        time.sleep(1);
-        remainingMinutes = session.getRemainingMinutes();
-        session.refresh();
-        self.assertGreater(session.getRemainingMinutes(), remainingMinutes);
+        session = icat.login("db", credentials)
+        time.sleep(1)
+        remainingMinutes = session.getRemainingMinutes()
+        session.refresh()
+        self.assertGreater(session.getRemainingMinutes(), remainingMinutes)
 
     def testWrite(self):
         invid = self.session.search("SELECT i.id FROM Investigation i WHERE i.facility.name = 'Test Facility' AND i.name = 'Inv 1'")[0]
