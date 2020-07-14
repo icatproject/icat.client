@@ -63,7 +63,7 @@ class IcatTest(unittest.TestCase):
             session.getRemainingMinutes();
             self.fail();
         except IcatException as e:
-            self.assertEquals(IcatException.SESSION, e.getType());
+            self.assertEqual(IcatException.SESSION, e.getType());
 
         session = icat.login("db", credentials);
         time.sleep(1);
@@ -78,77 +78,77 @@ class IcatTest(unittest.TestCase):
         dataset["datafiles"] = [{"name" : "df1"}, {"name":"df2"}]
         entity = {"Dataset" : dataset}
         dsid = self.session.write(entity)[0]
-        self.assertEquals([2], self.session.search("SELECT COUNT(df) FROM Datafile df"))
+        self.assertEqual([2], self.session.search("SELECT COUNT(df) FROM Datafile df"))
 
         dataset["id"] = dsid
         dataset["datafiles"] = [{"name" : "df3"}]
         dataset["description"] = "Indescribable"
         mt = self.session.write(entity)
-        self.assertEquals([], mt)
+        self.assertEqual([], mt)
 
-        self.assertEquals([3], self.session.search("SELECT COUNT(df) FROM Datafile df"))
-        self.assertEquals(["Test Facility"], self.session.search("SELECT df.dataset.investigation.facility.name FROM Datafile df WHERE df.name = 'df3'"))
+        self.assertEqual([3], self.session.search("SELECT COUNT(df) FROM Datafile df"))
+        self.assertEqual(["Test Facility"], self.session.search("SELECT df.dataset.investigation.facility.name FROM Datafile df WHERE df.name = 'df3'"))
 
     def testGet(self):
         fid = self.session.search("SELECT f.id FROM Facility f")[0]
         f = self.session.get("Facility", fid)
-        self.assertEquals(0, len(f["Facility"]["investigations"]))
+        self.assertEqual(0, len(f["Facility"]["investigations"]))
 
         f = self.session.get("Facility f INCLUDE f.investigations", fid)
-        self.assertEquals(3, len(f["Facility"]["investigations"]))
+        self.assertEqual(3, len(f["Facility"]["investigations"]))
 
     def testSearch(self):
         fid = self.session.search("SELECT f.id FROM Facility f")[0]
 
         f = self.session.search("SELECT f.id, f.name FROM Facility f")[0]
-        self.assertEquals("Test Facility", f[1])
-        self.assertEquals(fid, f[0])
+        self.assertEqual("Test Facility", f[1])
+        self.assertEqual(fid, f[0])
 
         f = self.session.search("SELECT f FROM Facility f")[0]
-        self.assertEquals("Test Facility", f["Facility"]["name"])
-        self.assertEquals(0, len(f["Facility"]["investigations"]))
+        self.assertEqual("Test Facility", f["Facility"]["name"])
+        self.assertEqual(0, len(f["Facility"]["investigations"]))
 
         f = self.session.search("SELECT f FROM Facility f INCLUDE f.investigations")[0]
-        self.assertEquals("Test Facility", f["Facility"]["name"])
-        self.assertEquals(3, len(f["Facility"]["investigations"]))
+        self.assertEqual("Test Facility", f["Facility"]["name"])
+        self.assertEqual(3, len(f["Facility"]["investigations"]))
 
         f = self.session.search("SELECT f FROM Facility f where f.id =" + str(fid) + " INCLUDE f.investigations")[0]
-        self.assertEquals("Test Facility", f["Facility"]["name"])
-        self.assertEquals(3, len(f["Facility"]["investigations"]))
+        self.assertEqual("Test Facility", f["Facility"]["name"])
+        self.assertEqual(3, len(f["Facility"]["investigations"]))
 
         c = self.session.search("SELECT COUNT(f) from Facility f")[0]
-        self.assertEquals(1, c)
+        self.assertEqual(1, c)
 
         f = self.session.search("SELECT f.name from Facility f")[0]
-        self.assertEquals("Test Facility", f)
+        self.assertEqual("Test Facility", f)
 
         try:
             f = self.session.search("Facility f INCLUDE f.investigation")
             self.fail()
         except IcatException as e:
-            self.assertEquals(IcatException.BAD_PARAMETER, e.getType())
+            self.assertEqual(IcatException.BAD_PARAMETER, e.getType())
 
     def testDelete(self):
-        self.assertEquals([1], self.session.search("SELECT COUNT(f) FROM Facility f"))
+        self.assertEqual([1], self.session.search("SELECT COUNT(f) FROM Facility f"))
         for fid in self.session.search("SELECT f.id from Facility f"):
             f = {"Facility": {"id" : fid}}
             self.session.delete(f)
-        self.assertEquals([0], self.session.search("SELECT COUNT(f) FROM Facility f"))
+        self.assertEqual([0], self.session.search("SELECT COUNT(f) FROM Facility f"))
 
     def testClone(self):
-        self.assertEquals([1], self.session.search("SELECT COUNT(f) FROM Facility f"))
-        self.assertEquals([3], self.session.search("SELECT COUNT(inv) FROM Investigation inv"))
+        self.assertEqual([1], self.session.search("SELECT COUNT(f) FROM Facility f"))
+        self.assertEqual([3], self.session.search("SELECT COUNT(inv) FROM Investigation inv"))
         fid = self.session.search("SELECT f.id FROM Facility f")[0]
         newfid = self.session.cloneEntity("Facility", fid, {"name": "newName"})
         self.assertNotEqual(fid, newfid)
-        self.assertEquals([2], self.session.search("SELECT COUNT(f) FROM Facility f"))
-        self.assertEquals([6], self.session.search("SELECT COUNT(inv) FROM Investigation inv"))
+        self.assertEqual([2], self.session.search("SELECT COUNT(f) FROM Facility f"))
+        self.assertEqual([6], self.session.search("SELECT COUNT(inv) FROM Investigation inv"))
 
     def testPorter(self):
         dump = self.session.exportMetaData()
         self.assertTrue(dump.startswith("# ICAT Export file"))
         c = self.session.search("SELECT COUNT(f) FROM Facility f")[0]
-        self.assertEquals(1, c)
+        self.assertEqual(1, c)
         f = self.session.search("SELECT f.id, f.description FROM Facility f")[0]
         fid = f[0]
 
@@ -157,16 +157,16 @@ class IcatTest(unittest.TestCase):
         self.session.write(entity)
 
         f = self.session.search("SELECT f.id, f.description FROM Facility f")[0]
-        self.assertEquals(fid, f[0])
-        self.assertEquals("Updated", f[1])
+        self.assertEqual(fid, f[0])
+        self.assertEqual("Updated", f[1])
 
         self.session.importMetaData(dump, duplicate=Session.OVERWRITE)
 
         c = self.session.search("SELECT COUNT(f) FROM Facility f")[0]
         f = self.session.search("SELECT f.id, f.description FROM Facility f")[0]
-        self.assertEquals(fid, f[0])
+        self.assertEqual(fid, f[0])
         self.assertIsNone(f[1])
-        self.assertEquals(1, c)
+        self.assertEqual(1, c)
 
 if __name__ == '__main__':
     unittest.main()
