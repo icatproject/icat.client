@@ -11,22 +11,22 @@ if arg == "INSTALL":
         wheels = glob.glob("*.whl")
         if len(wheels) != 1: abort ("There must be exactly one .whl file")
         cmd = "pip install " + wheels[0]
-        out, err, rc = actions.execute(cmd) 
+        out, err, rc = actions.execute(cmd)
         if rc: abort(cmd + " -> " + out + err)
-        if actions.verbosity: 
-            print out 
+        if actions.verbosity:
+            print out
 
     except Exception, e:
         abort(str(e))
-                
+
 if arg == "UNINSTALL":
-    
-    try: 
+
+    try:
         cmd = "pip uninstall -y icat"
         out, err, rc = actions.execute(cmd)
         if rc: abort(cmd + " -> " + out + err)
-        if actions.verbosity: 
-            print out 
+        if actions.verbosity:
+            print out
 
     except Exception, e:
-        abort(str(e))       
+        abort(str(e))
