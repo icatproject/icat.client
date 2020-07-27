@@ -22,4 +22,4 @@ install:
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat-client-dev-hosts.yml
  - cd ..
  
-script: 'mvn -DserverUrl=https://$(localhost):8181 test -B'
+script: 'mvn -DserverUrl=https://localhost:8181 test -B'
