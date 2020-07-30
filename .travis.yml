@@ -1,6 +1,11 @@
 language: java
 jdk:
   - openjdk8
+  - openjdk11
+
+jobs:
+  allow_failures:
+    - jdk: openjdk11
 
 dist: xenial
 
@@ -22,4 +27,4 @@ install:
  - ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat-client-dev-hosts.yml
  - cd ..
  
-script: 'mvn -DserverUrl=https://$(hostname):8181 test -B'
+script: 'mvn -DserverUrl=https://localhost:8181 test -B'
