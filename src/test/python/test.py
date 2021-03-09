@@ -43,7 +43,7 @@ class IcatTest(unittest.TestCase):
         
     def testInfo(self):
         version = self.icat.getVersion()
-        self.assertTrue(version.startswith("4.10."))
+        self.assertTrue(version.startswith("4.11."))
  
     def testSession(self):
         icat = ICAT(os.environ["serverUrl"], False)
