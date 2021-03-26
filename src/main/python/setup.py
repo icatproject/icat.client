@@ -7,7 +7,7 @@ here = path.abspath(path.dirname(__file__))
 
 with open(path.join(here, "..", "..", "..", 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
-    
+
 setup(
     name='icat',
 
@@ -22,9 +22,9 @@ setup(
     author_email='dr.s.m.fisher@gmail.com',
 
     license='Apache Version 2',
-    
+
     py_modules=["icat"],
 
     install_requires=['requests_toolbelt']
-) 
-      
+)
+
