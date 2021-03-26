@@ -3,6 +3,8 @@
   become: true
   vars_files:
     - 'group_vars/all/vars.yml'
+  vars:
+    icat_server_version: '4.11.0'
   roles:
     - role: common
     - role: java
