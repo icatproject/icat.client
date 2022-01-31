@@ -113,7 +113,7 @@ public class TestIcatClient {
 	@Test
 	public void python() {
 		ShellCommand sc = new ShellCommand("bash", "-c", "serverUrl=" + System.getProperty("serverUrl")
-				+ " PYTHONPATH=src/main/python/ python src/test/python/test.py");
+				+ " PYTHONPATH=src/main/python/ python2 src/test/python/test.py");
 		if (sc.getExitValue() != 0) {
 			System.out.println(sc.getStdout());
 			System.out.println(sc.getStderr());
