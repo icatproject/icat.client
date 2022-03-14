@@ -1,5 +1,5 @@
 ---
-- hosts: icat-client-dev-hosts
+- hosts: icat_client_dev_hosts
   become: true
   vars_files:
     - 'group_vars/all/vars.yml'
