@@ -11,8 +11,8 @@
     - role: mariadb
     - role: icatdb
     - role: payara
-    - role: authn-simple
-    - role: authn-db
-    - role: icat-lucene
-    - role: dev-common
-    - role: icat-server
+    - role: authn_simple
+    - role: authn_db
+    - role: icat_lucene
+    - role: dev_common
+    - role: icat_server

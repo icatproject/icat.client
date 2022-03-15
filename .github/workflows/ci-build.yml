@@ -47,7 +47,7 @@ jobs:
         with:
           repository: icatproject-contrib/icat-ansible
           path: icat-ansible
-          ref: fix_warnings_#23
+          ref: underscore_changes
       
       - name: Setup Ansible
         run: |
@@ -57,7 +57,7 @@ jobs:
           mv ../vault.yml ./group_vars/all
           mv ../icat_client_dev_hosts.yml .
           sed -i -e "s/^payara_user: \"glassfish\"/payara_user: \"runner\"/" ./group_vars/all/vars.yml
-          sed -i -e "s/python-pip/python3-pip/" ./roles/dev-common/tasks/main.yml
+          sed -i -e "s/python-pip/python3-pip/" ./roles/dev_common/tasks/main.yml
           ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat_client_dev_hosts.yml
           cd ..
 
