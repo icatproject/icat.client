@@ -47,17 +47,18 @@ jobs:
         with:
           repository: icatproject-contrib/icat-ansible
           path: icat-ansible
+          ref: master
       
       - name: Setup Ansible
         run: |
           cd icat-ansible
-          echo -e "[icat-client-dev-hosts]\nlocalhost ansible_connection=local" > hosts
+          echo -e "[icat_client_dev_hosts]\nlocalhost ansible_connection=local" > hosts
           echo -e "icattravispw" > vault_pass.txt
           mv ../vault.yml ./group_vars/all
-          mv ../icat-client-dev-hosts.yml .
+          mv ../icat_client_dev_hosts.yml .
           sed -i -e "s/^payara_user: \"glassfish\"/payara_user: \"runner\"/" ./group_vars/all/vars.yml
-          sed -i -e "s/python-pip/python3-pip/" ./roles/dev-common/tasks/main.yml
-          ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat-client-dev-hosts.yml
+          sed -i -e "s/python-pip/python3-pip/" ./roles/dev_common/tasks/main.yml
+          ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat_client_dev_hosts.yml
           cd ..
 
       - name: Test with Maven
