@@ -48,7 +48,14 @@ jobs:
           repository: icatproject-contrib/icat-ansible
           path: icat-ansible
           ref: master
-      
+
+      # Remove existing MySQL installation so it doesn't interfere with GitHub Actions
+      - name: Remove existing mysql
+        run: |
+          sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+          sudo apt-get remove --purge "mysql*"
+          sudo rm -rf /var/lib/mysql* /etc/mysql
+
       - name: Setup Ansible
         run: |
           cd icat-ansible
