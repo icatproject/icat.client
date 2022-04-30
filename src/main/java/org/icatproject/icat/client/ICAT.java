@@ -592,6 +592,61 @@ public class ICAT {
 		}
 	}
 
+	String searchInvestigations(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, List<String> samples, String userFullName, String searchAfter, int limit, String sort, String facets)
+			throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("search/documents");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", "Investigation");
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+			}
+			if (upper != null) {
+				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			if (samples != null && !samples.isEmpty()) {
+				gen.writeStartArray("samples");
+				for (String sample : samples) {
+					gen.write(sample);
+				}
+				gen.writeEnd();
+			}
+			if (userFullName != null) {
+				gen.write("userFullName", userFullName);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("search_after", searchAfter);
+		uriBuilder.setParameter("limit", Integer.toString(limit));
+		uriBuilder.setParameter("sort", sort);
+		uriBuilder.setParameter("facets", facets);
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+
+		}
+	}
+
 	String searchDatasets(String sessionId, String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, int maxResults) throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("lucene/data");
@@ -620,6 +675,50 @@ public class ICAT {
 
 		uriBuilder.setParameter("query", baos.toString());
 		uriBuilder.setParameter("maxCount", Integer.toString(maxResults));
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+
+		}
+	}
+
+	String searchDatasets(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, String searchAfter, int limit, String sort, String facets) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("search/documents");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", "Dataset");
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+			}
+			if (upper != null) {
+				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("search_after", searchAfter);
+		uriBuilder.setParameter("limit", Integer.toString(limit));
+		uriBuilder.setParameter("sort", sort);
+		uriBuilder.setParameter("facets", facets);
 		URI uri = getUri(uriBuilder);
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -793,6 +892,49 @@ public class ICAT {
 
 		uriBuilder.setParameter("query", baos.toString());
 		uriBuilder.setParameter("maxCount", Integer.toString(maxResults));
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+		}
+	}
+
+	String searchDatafiles(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, String searchAfter, int limit, String sort, String facets) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("search/documents");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", "Datafile");
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+			}
+			if (upper != null) {
+				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("search_after", searchAfter);
+		uriBuilder.setParameter("limit", Integer.toString(limit));
+		uriBuilder.setParameter("sort", sort);
+		uriBuilder.setParameter("facets", facets);
 		URI uri = getUri(uriBuilder);
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {

@@ -145,14 +145,14 @@ public class Session {
 	 * Write (create or update) ICAT entities from a Json String.
 	 * 
 	 * @param entities
-	 *            Json representation of ICAT entities and their related
-	 *            entities. If there is only one, the outer "[" "]" may be
-	 *            omitted.
+	 *                 Json representation of ICAT entities and their related
+	 *                 entities. If there is only one, the outer "[" "]" may be
+	 *                 omitted.
 	 * 
 	 * @return the ids of the top level entities created
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public List<Long> write(String entities) throws IcatException {
 		return icat.write(sessionId, entities);
@@ -163,14 +163,14 @@ public class Session {
 	 * 
 	 * @deprecated Replace by {@link #write(String)}
 	 * @param entities
-	 *            Json representation of ICAT entities and their related
-	 *            entities. If there is only one, the outer "[" "]" may be
-	 *            omitted.
+	 *                 Json representation of ICAT entities and their related
+	 *                 entities. If there is only one, the outer "[" "]" may be
+	 *                 omitted.
 	 * 
 	 * @return the ids of the top level entities created
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	@Deprecated
 	public List<Long> create(String entities) throws IcatException {
@@ -181,11 +181,11 @@ public class Session {
 	 * Delete ICAT entities specified by a Json String.
 	 * 
 	 * @param entities
-	 *            Json representation of ICAT entities. If there is only one the
-	 *            outer "[" "]" may be omitted.
+	 *                 Json representation of ICAT entities. If there is only one
+	 *                 the outer "[" "]" may be omitted.
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public void delete(String entities) throws IcatException {
 		icat.delete(sessionId, entities);
@@ -195,16 +195,16 @@ public class Session {
 	 * Export all metadata from ICAT.
 	 * 
 	 * @param attributes
-	 *            which attributes to export. If you don't plan to
-	 *            importMetaData as a "root user" there is no point in using
-	 *            {@link Attributes#ALL} and {@link Attributes#USER} is to be
-	 *            preferred.
+	 *                   which attributes to export. If you don't plan to
+	 *                   importMetaData as a "root user" there is no point in using
+	 *                   {@link Attributes#ALL} and {@link Attributes#USER} is to be
+	 *                   preferred.
 	 * 
 	 * @return an OutputStream. The structure of the OutputStream is described
 	 *         at {@link Session}
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public InputStream exportMetaData(Attributes attributes) throws IcatException {
 		return icat.exportMetaData(sessionId, null, attributes);
@@ -214,19 +214,19 @@ public class Session {
 	 * Export metadata from ICAT as specified in the query
 	 * 
 	 * @param query
-	 *            a normal ICAT query which may have an INCLUDE clause. This is
-	 *            used to define the metadata to export.
+	 *                   a normal ICAT query which may have an INCLUDE clause. This
+	 *                   is used to define the metadata to export.
 	 * @param attributes
-	 *            which attributes to export. If you don't plan to
-	 *            importMetaData as a "root user" there is no point in using
-	 *            {@link Attributes#ALL} and {@link Attributes#USER} is to be
-	 *            preferred.
+	 *                   which attributes to export. If you don't plan to
+	 *                   importMetaData as a "root user" there is no point in using
+	 *                   {@link Attributes#ALL} and {@link Attributes#USER} is to be
+	 *                   preferred.
 	 * 
 	 * @return an OutputStream. The structure of the OutputStream is described
 	 *         at {@link Session}
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public InputStream exportMetaData(String query, Attributes attributes) throws IcatException {
 		return icat.exportMetaData(sessionId, query, attributes);
@@ -238,7 +238,7 @@ public class Session {
 	 * @return the time remaining
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public double getRemainingMinutes() throws IcatException {
 		return icat.getRemainingMinutes(sessionId);
@@ -259,7 +259,7 @@ public class Session {
 	 * @return the user name
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public String getUserName() throws IcatException {
 		return icat.getUserName(sessionId);
@@ -269,19 +269,21 @@ public class Session {
 	 * Import metadata into ICAT for a file specified by a Path
 	 * 
 	 * @param path
-	 *            the path of the import file. The structure of the import file
-	 *            is described at {@link Session}
+	 *                        the path of the import file. The structure of the
+	 *                        import file is described at {@link Session}
 	 * @param duplicateAction
-	 *            what to do when a duplicate is encountered
+	 *                        what to do when a duplicate is encountered
 	 * @param attributes
-	 *            which attributes to import. Only a "root user" can specify
-	 *            {@link Attributes#ALL} to respect those fields specified in
-	 *            the import file which are not settable by normal users:
-	 *            createId, createTime, modId and modTime. This is to allow an
-	 *            ICAT to be accurately exported and imported.
+	 *                        which attributes to import. Only a "root user" can
+	 *                        specify {@link Attributes#ALL} to respect those fields
+	 *                        specified in the import file which are not settable by
+	 *                        normal
+	 *                        users: createId, createTime, modId and modTime. This
+	 *                        is to
+	 *                        allow an ICAT to be accurately exported and imported.
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public void importMetaData(Path path, DuplicateAction duplicateAction, Attributes attributes) throws IcatException {
 		icat.importMetaData(sessionId, path, duplicateAction, attributes);
@@ -291,7 +293,7 @@ public class Session {
 	 * Logout of the session after which the session cannot be re-used
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public void logout() throws IcatException {
 		icat.logout(sessionId);
@@ -301,7 +303,7 @@ public class Session {
 	 * Refresh the session by resetting the time remaining
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public void refresh() throws IcatException {
 		icat.refresh(sessionId);
@@ -314,12 +316,12 @@ public class Session {
 	 * continue in its present form.
 	 * 
 	 * @param query
-	 *            a normal ICAT query with optional INCLUDE and LIMIT clauses.
+	 *              a normal ICAT query with optional INCLUDE and LIMIT clauses.
 	 * 
 	 * @return the Json holding the results
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public String search(String query) throws IcatException {
 		return icat.search(sessionId, query);
@@ -332,14 +334,14 @@ public class Session {
 	 * continue in its present form.
 	 * 
 	 * @param query
-	 *            a normal ICAT get query with an optional INCLUDE clause.
+	 *              a normal ICAT get query with an optional INCLUDE clause.
 	 * @param id
-	 *            the id of the entity to be returned
+	 *              the id of the entity to be returned
 	 * 
 	 * @return the Json holding the result
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public String get(String query, long id) throws IcatException {
 		return icat.get(sessionId, query, id);
@@ -349,40 +351,48 @@ public class Session {
 	 * Return a set of investigations satisfying the constraints
 	 * 
 	 * @param user
-	 *            If not null must exactly match the name of a user related via
-	 *            the investigation user to the investigation.
+	 *                     If not null must exactly match the name of a user related
+	 *                     via
+	 *                     the investigation user to the investigation.
 	 * @param text
-	 *            If not null a text search (with ANDs ORs etc) for any text in
-	 *            the investigation fields. This is understood by the <a href=
-	 *            "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
-	 *            >lucene parser</a> but avoid trying to use fields.
+	 *                     If not null a text search (with ANDs ORs etc) for any
+	 *                     text in
+	 *                     the investigation fields. This is understood by the
+	 *                     <a href=
+	 *                     "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                     >lucene parser</a> but avoid trying to use fields.
 	 * @param lower
-	 *            If not null investigation end date must be greater than or
-	 *            equal to this.
+	 *                     If not null investigation end date must be greater than
+	 *                     or
+	 *                     equal to this.
 	 * @param upper
-	 *            If not null investigation start date must be less than or
-	 *            equal to this.
+	 *                     If not null investigation start date must be less than or
+	 *                     equal to this.
 	 * @param parameters
-	 *            If not null all the parameters must match.
+	 *                     If not null all the parameters must match.
 	 * @param samples
-	 *            If not null all the specified samples, using a text search
-	 *            (with ANDs ORs etc) must be related to the investigation. This
-	 *            is understood by the <a href=
-	 *            "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
-	 *            >lucene parser</a> but avoid trying to use fields.
+	 *                     If not null all the specified samples, using a text
+	 *                     search
+	 *                     (with ANDs ORs etc) must be related to the investigation.
+	 *                     This
+	 *                     is understood by the <a href=
+	 *                     "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                     >lucene parser</a> but avoid trying to use fields.
 	 * @param userFullName
-	 *            If not null a text search is made against the full name of a
-	 *            user related via the investigation user to the investigation.
-	 *            This is understood by the <a href=
-	 *            "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
-	 *            >lucene parser</a> but avoid trying to use fields.
+	 *                     If not null a text search is made against the full name
+	 *                     of a
+	 *                     user related via the investigation user to the
+	 *                     investigation.
+	 *                     This is understood by the <a href=
+	 *                     "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                     >lucene parser</a> but avoid trying to use fields.
 	 * @param maxResults
-	 *            The maximum number of results to return.
+	 *                     The maximum number of results to return.
 	 * 
 	 * @return the Json holding the result.
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public String searchInvestigations(String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
@@ -392,31 +402,96 @@ public class Session {
 	}
 
 	/**
-	 * Return a set of datasets satisfying the constraints
+	 * Return a set of indexed documents representing Investigations that satisfy
+	 * the search constraints
 	 * 
 	 * @param user
-	 *            If not null must exactly match the name of a user related via
-	 *            the investigation user and the investigation to the data set.
+	 *                     If not null must exactly match the name of a user related
+	 *                     via the investigation user to the investigation.
 	 * @param text
-	 *            If not null a text search (with ANDs ORs etc) for any text in
-	 *            the data set fields. This is understood by the <a href=
-	 *            "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
-	 *            >lucene parser</a> but avoid trying to use fields.
+	 *                     If not null a text search (with ANDs ORs etc) for any
+	 *                     text in the investigation fields. This is understood by
+	 *                     the <a href=
+	 *                     "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                     >lucene parser</a> but avoid trying to use fields.
 	 * @param lower
-	 *            If not null data set end date must be greater than or equal to
-	 *            this.
+	 *                     If not null investigation end date must be greater than
+	 *                     or equal to this.
 	 * @param upper
-	 *            If not null data set start date must be less than or equal to
-	 *            this.
+	 *                     If not null investigation start date must be less than or
+	 *                     equal to this.
 	 * @param parameters
-	 *            If not null all the parameters must match.
-	 * @param maxResults
-	 *            The maximum number of results to return.
+	 *                     If not null all the parameters must match.
+	 * @param samples
+	 *                     If not null all the specified samples, using a text
+	 *                     search (with ANDs ORs etc) must be related to the
+	 *                     investigation.
+	 *                     This is understood by the <a href=
+	 *                     "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                     >lucene parser</a> but avoid trying to use fields.
+	 * @param userFullName
+	 *                     If not null a text search is made against the full name
+	 *                     of a user related via the investigation user to the
+	 *                     investigation. This is understood by the <a href=
+	 *                     "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                     >lucene parser</a> but avoid trying to use fields.
+	 * @param searchAfter
+	 *                     String representing the last document of a previous
+	 *                     search, so that results from this search will only
+	 *                     include results from after the document
+	 * @param limit
+	 *                     The maximum number of results to return.
+	 * @param sort
+	 *                     String representing a JSON object which contains key
+	 *                     value pairs of the field(s) to sort on and their
+	 *                     direction
+	 * @param facets
+	 *                    String representing a JsonArray of JsonObjects. Each
+	 *                    should define the "target" entity name, and optionally
+	 *                    another JsonArray of "dimensions", which are specific
+	 *                    fields to facet. If absent, then all applicable fields
+	 *                    will be faceted.
 	 * 
 	 * @return the Json holding the result.
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
+	 */
+	public String searchInvestigations(String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, List<String> samples, String userFullName, String searchAfter,
+			int limit, String sort, String facets)
+			throws IcatException {
+		return icat.searchInvestigations(sessionId, user, text, lower, upper, parameters, samples, userFullName,
+				searchAfter, limit, sort, facets);
+	}
+
+	/**
+	 * Return a set of datasets satisfying the constraints
+	 * 
+	 * @param user
+	 *                   If not null must exactly match the name of a user related
+	 *                   via the investigation user and the investigation to the
+	 *                   data set.
+	 * @param text
+	 *                   If not null a text search (with ANDs ORs etc) for any text
+	 *                   in the data set fields. This is understood by the <a href=
+	 *                   "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                   >lucene parser</a> but avoid trying to use fields.
+	 * @param lower
+	 *                   If not null data set end date must be greater than or equal
+	 *                   to this.
+	 * @param upper
+	 *                   If not null data set start date must be less than or equal
+	 *                   to this.
+	 * @param parameters
+	 *                   If not null all the parameters must match.
+	 * @param maxResults
+	 *                   The maximum number of results to return.
+	 * 
+	 * @return the Json holding the result.
+	 * 
+	 * @throws IcatException
+	 *                       For various ICAT errors.
 	 */
 	public String searchDatasets(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			int maxResults) throws IcatException {
@@ -424,10 +499,57 @@ public class Session {
 	}
 
 	/**
+	 * Return a set of indexed documents representing Datasets that satisfy the
+	 * search constraints
+	 * 
+	 * @param user
+	 *                    If not null must exactly match the name of a user related
+	 *                    via the investigation user and the investigation to the
+	 *                    data set.
+	 * @param text
+	 *                    If not null a text search (with ANDs ORs etc) for any text
+	 *                    in the data set fields. This is understood by the <a href=
+	 *                    "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                    >lucene parser</a> but avoid trying to use fields.
+	 * @param lower
+	 *                    If not null data set end date must be greater than or
+	 *                    equal to this.
+	 * @param upper
+	 *                    If not null data set start date must be less than or equal
+	 *                    to this.
+	 * @param parameters
+	 *                    If not null all the parameters must match.
+	 * @param searchAfter
+	 *                    String representing the last document of a previous
+	 *                    search, so that results from this search will only include
+	 *                    results from after the document
+	 * @param limit
+	 *                    The maximum number of results to return.
+	 * @param sort
+	 *                    String representing a JSON object which contains key value
+	 *                    pairs of the field(s) to sort on and their direction
+	 * @param facets
+	 *                    String representing a JsonArray of JsonObjects. Each
+	 *                    should define the "target" entity name, and optionally
+	 *                    another JsonArray of "dimensions", which are specific
+	 *                    fields to facet. If absent, then all applicable fields
+	 *                    will be faceted.
+	 * 
+	 * @return the Json holding the result.
+	 * 
+	 * @throws IcatException
+	 *                       For various ICAT errors.
+	 */
+	public String searchDatasets(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
+			String searchAfter, int limit, String sort, String facets) throws IcatException {
+		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, searchAfter, limit, sort, facets);
+	}
+
+	/**
 	 * Clear the lucene populating list
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public void luceneClear() throws IcatException {
 		icat.luceneClear(sessionId);
@@ -437,7 +559,7 @@ public class Session {
 	 * Force a commit of the lucene database
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public void luceneCommit() throws IcatException {
 		icat.luceneCommit(sessionId);
@@ -447,10 +569,10 @@ public class Session {
 	 * Clear and repopulate lucene documents for the specified entityName.
 	 * 
 	 * @param entityName
-	 *            the name of the entity
+	 *                   the name of the entity
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public void lucenePopulate(String entityName, long minid) throws IcatException {
 		icat.lucenePopulate(sessionId, entityName, minid);
@@ -462,7 +584,7 @@ public class Session {
 	 * @return list of class names
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public List<String> luceneGetPopulating() throws IcatException {
 		return icat.luceneGetPopulating(sessionId);
@@ -472,28 +594,30 @@ public class Session {
 	 * Return a set of data files satisfying the constraints
 	 * 
 	 * @param user
-	 *            If not null must exactly match the name of a user related via
-	 *            the investigation user and the investigation to the data set.
+	 *                   If not null must exactly match the name of a user related
+	 *                   via
+	 *                   the investigation user and the investigation to the data
+	 *                   set.
 	 * @param text
-	 *            If not null a text search (with ANDs ORs etc) for any text in
-	 *            the data file fields. This is understood by the <a href=
-	 *            "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
-	 *            >lucene parser</a> but avoid trying to use fields.
+	 *                   If not null a text search (with ANDs ORs etc) for any text
+	 *                   in the data file fields. This is understood by the <a href=
+	 *                   "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                   >lucene parser</a> but avoid trying to use fields.
 	 * @param lower
-	 *            If not null data file date must be greater than or equal to
-	 *            this.
+	 *                   If not null data file date must be greater than or equal to
+	 *                   this.
 	 * @param upper
-	 *            If not null data file date must be less than or equal to
-	 *            thilist of class namess.
+	 *                   If not null data file date must be less than or equal to
+	 *                   this.
 	 * @param parameters
-	 *            If not null all the parameters must match.
+	 *                   If not null all the parameters must match.
 	 * @param maxResults
-	 *            The maximum number of results to return.
+	 *                   The maximum number of results to return.
 	 * 
 	 * @return the Json holding the result.
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public String searchDatafiles(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			int maxResults) throws IcatException {
@@ -501,19 +625,67 @@ public class Session {
 	}
 
 	/**
+	 * Return a set of indexed documents representing Datafiles that satisfy the
+	 * search constraints
+	 * 
+	 * @param user
+	 *                    If not null must exactly match the name of a user related
+	 *                    via the investigation user and the investigation to the
+	 *                    data set.
+	 * @param text
+	 *                    If not null a text search (with ANDs ORs etc) for any text
+	 *                    in the data file fields. This is understood by the
+	 *                    <a href=
+	 *                    "https://lucene.apache.org/core/4_10_2/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#package_description"
+	 *                    >lucene parser</a> but avoid trying to use fields.
+	 * @param lower
+	 *                    If not null data file date must be greater than or equal
+	 *                    to this.
+	 * @param upper
+	 *                    If not null data file date must be less than or equal to
+	 *                    this.
+	 * @param parameters
+	 *                    If not null all the parameters must match.
+	 * @param searchAfter
+	 *                    String representing the last document of a previous
+	 *                    search, so that results from this search will only include
+	 *                    results from after the document
+	 * @param limit
+	 *                    The maximum number of results to return.
+	 * @param sort
+	 *                    String representing a JSON object which contains key value
+	 *                    pairs of the field(s) to sort on and their direction
+	 * @param facets
+	 *                    String representing a JsonArray of JsonObjects. Each
+	 *                    should define the "target" entity name, and optionally
+	 *                    another JsonArray of "dimensions", which are specific
+	 *                    fields to facet. If absent, then all applicable fields
+	 *                    will be faceted.
+	 * 
+	 * @return the Json holding the result.
+	 * 
+	 * @throws IcatException
+	 *                       For various ICAT errors.
+	 */
+	public String searchDatafiles(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
+			String searchAfter, int limit, String sort, String facets) throws IcatException {
+		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, searchAfter, limit, sort, facets);
+	}
+
+	/**
 	 * Clone an entity and return the id of the clone
 	 * 
 	 * @param name
-	 *            the name of the type of entity
+	 *             the name of the type of entity
 	 * @param id
-	 *            the id value of the entity to be cloned
+	 *             the id value of the entity to be cloned
 	 * @param keys
-	 *            a map of field names and values to be different in the clone
+	 *             a map of field names and values to be different in the clone
 	 * 
 	 * @return the id of the clone
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public long cloneEntity(String name, long id, Map<String, String> keys) throws IcatException {
 		return icat.cloneEntity(sessionId, name, id, keys);
@@ -525,10 +697,10 @@ public class Session {
 	 * This is only used in testing
 	 * 
 	 * @param ms
-	 *            number of milliseconds to wait
+	 *           number of milliseconds to wait
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors.
+	 *                       For various ICAT errors.
 	 */
 	public void waitMillis(long ms) throws IcatException {
 		icat.waitMillis(sessionId, ms);
@@ -537,7 +709,7 @@ public class Session {
 	/**
 	 * @param path input path to find contents of
 	 * @return json describing the contents
-	 * @throws IcatException 
+	 * @throws IcatException
 	 */
 	public String list(String path) throws IcatException {
 		return icat.list(sessionId, path);
