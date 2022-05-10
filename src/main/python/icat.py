@@ -56,7 +56,7 @@ class IcatException(Exception):
 class ICAT(object):
 
     def _check(self, r):
-        if r.status_code / 100 != 2:
+        if r.status_code // 100 != 2:
             json = r.json()
             if json.get("offset"):
                 raise IcatException(json["code"], json["message"], json["offset"])
