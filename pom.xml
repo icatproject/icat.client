@@ -69,9 +69,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
+			<groupId>jakarta.platform</groupId>
+			<artifactId>jakarta.jakartaee-api</artifactId>
+			<version>9.1.0</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -96,7 +97,7 @@
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>jakarta.json</artifactId>
-			<version>1.1.5</version>
+			<version>2.0.1</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -147,9 +148,9 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>com.sun.xml.ws</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.0.2</version>
 				<executions>
 					<execution>
 						<id>execution1</id>
