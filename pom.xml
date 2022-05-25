@@ -144,38 +144,6 @@
 							</arguments>
 						</configuration>
 					</execution>
-
-					<execution>
-						<configuration>
-							<executable>python</executable>
-							<workingDirectory>src/main/python</workingDirectory>
-							<arguments>
-								<argument>setup.py</argument>
-								<argument>bdist_wheel</argument>
-							</arguments>
-						</configuration>
-						<id>package python</id>
-						<phase>package</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
-
-					<execution>
-						<configuration>
-							<executable>pydoc</executable>
-							<workingDirectory>target/site</workingDirectory>
-							<arguments>
-								<argument>-w</argument>
-								<argument>../../src/main/python/icat.py</argument>
-							</arguments>
-						</configuration>
-						<id>document python</id>
-						<phase>site</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
 				</executions>
 			</plugin>
 
