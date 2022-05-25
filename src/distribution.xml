@@ -15,10 +15,6 @@
 		</fileSet>
 		<fileSet>
 			<outputDirectory>icat.client</outputDirectory>
-			<directory>${basedir}/src/main/python/dist</directory>
-		</fileSet>
-		<fileSet>
-			<outputDirectory>icat.client</outputDirectory>
 			<directory>${basedir}</directory>
 			<filtered>true</filtered>
 			<includes>
@@ -36,20 +32,5 @@
 				<include>org.icatproject:icat.client</include>
 			</includes>
 		</dependencySet>
-
-		<dependencySet>
-			<outputDirectory>icat.client</outputDirectory>
-			<useTransitiveDependencies>false</useTransitiveDependencies>
-			<unpack>true</unpack>
-			<unpackOptions>
-				<includes>
-					<include>*.py</include>
-				</includes>
-			</unpackOptions>
-			<includes>
-				<include>org.icatproject:icat.utils</include>
-			</includes>
-		</dependencySet>
-
 	</dependencySets>
 </assembly>
