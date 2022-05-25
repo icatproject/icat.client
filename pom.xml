@@ -6,7 +6,7 @@
 	<version>4.11.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>ICAT Clients</name>
-	<description>Provides facilities to login to an ICAT instance after which one can create, read, update or delete entities according to your permissions. This includes a Java client using SOAP access as well as Python and Java clients using the REST interface of the icat.server.</description>
+	<description>Provides facilities to login to an ICAT instance after which one can create, read, update or delete entities according to your permissions. This includes a Java client using SOAP access and a Java client using the REST interface of the icat.server.</description>
 
 	<properties>
 		<wsdl>${basedir}/ICAT.wsdl</wsdl>
