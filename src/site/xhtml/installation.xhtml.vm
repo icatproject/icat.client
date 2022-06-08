@@ -9,6 +9,15 @@
 
 	<h1>ICAT Clients Installation</h1>
 
+	<p>icat.client only consists of a jar file that is made available in the 
+		maven repository of the ICAT project. It does not need to be installed 
+		locally. In order to use it in a Java application, add a dependency for 
+		the appropriate version of icat.client to the pom file of your 
+		application (see below for details). The build process will then fetch 
+		it from the repository as needed. Alternatively, if you are not using 
+		maven, download the jar file and add it to the classpath of your 
+		project.</p>
+
 	<h3>Compatibility</h3>
 	<p>For full functionality you need an icat.server version 5.0.0 or
 		greater. The restful client will work with earlier releases of the
