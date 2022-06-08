@@ -20,7 +20,6 @@ import org.icatproject.icat.client.ICAT;
 import org.icatproject.icat.client.IcatException;
 import org.icatproject.icat.client.IcatException.IcatExceptionType;
 import org.icatproject.icat.client.Session;
-import org.icatproject.utils.ShellCommand;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -108,17 +107,6 @@ public class TestIcatClient {
 	@Test
 	public void testInfo() throws Exception {
 		assertTrue(icat.getVersion().startsWith("5.0."));
-	}
-
-	@Test
-	public void python() {
-		ShellCommand sc = new ShellCommand("bash", "-c", "serverUrl=" + System.getProperty("serverUrl")
-				+ " PYTHONPATH=src/main/python/ python src/test/python/test.py");
-		if (sc.getExitValue() != 0) {
-			System.out.println(sc.getStdout());
-			System.out.println(sc.getStderr());
-			fail();
-		}
 	}
 
 }
