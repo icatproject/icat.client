@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.json.JsonArray;
+
 /**
  * A RESTful ICAT session.
  * <p>
@@ -439,7 +441,7 @@ public class Session {
 	 *                     String representing the last document of a previous
 	 *                     search, so that results from this search will only
 	 *                     include results from after the document
-	 * @param limit
+	 * @param maxCount
 	 *                     The maximum number of results to return.
 	 * @param sort
 	 *                     String representing a JSON object which contains key
@@ -458,11 +460,10 @@ public class Session {
 	 *                       For various ICAT errors.
 	 */
 	public String searchInvestigations(String user, String text, Date lower, Date upper,
-			List<ParameterForLucene> parameters, List<String> samples, String userFullName, String searchAfter,
-			int limit, String sort, String facets)
-			throws IcatException {
-		return icat.searchInvestigations(sessionId, user, text, lower, upper, parameters, samples, userFullName,
-				searchAfter, limit, sort, facets);
+			List<ParameterForLucene> parameters, String userFullName, String searchAfter, int maxCount, String sort,
+			JsonArray facets) throws IcatException {
+		return icat.searchInvestigations(sessionId, user, text, lower, upper, parameters, userFullName,
+				searchAfter, maxCount, sort, facets);
 	}
 
 	/**
@@ -523,7 +524,7 @@ public class Session {
 	 *                    String representing the last document of a previous
 	 *                    search, so that results from this search will only include
 	 *                    results from after the document
-	 * @param limit
+	 * @param maxCount
 	 *                    The maximum number of results to return.
 	 * @param sort
 	 *                    String representing a JSON object which contains key value
@@ -541,8 +542,8 @@ public class Session {
 	 *                       For various ICAT errors.
 	 */
 	public String searchDatasets(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
-			String searchAfter, int limit, String sort, String facets) throws IcatException {
-		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, searchAfter, limit, sort, facets);
+			String searchAfter, int maxCount, String sort, JsonArray facets) throws IcatException {
+		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, searchAfter, maxCount, sort, facets);
 	}
 
 	/**
@@ -650,7 +651,7 @@ public class Session {
 	 *                    String representing the last document of a previous
 	 *                    search, so that results from this search will only include
 	 *                    results from after the document
-	 * @param limit
+	 * @param maxCount
 	 *                    The maximum number of results to return.
 	 * @param sort
 	 *                    String representing a JSON object which contains key value
@@ -668,8 +669,8 @@ public class Session {
 	 *                       For various ICAT errors.
 	 */
 	public String searchDatafiles(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
-			String searchAfter, int limit, String sort, String facets) throws IcatException {
-		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, searchAfter, limit, sort, facets);
+			String searchAfter, int maxCount, String sort, JsonArray facets) throws IcatException {
+		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, searchAfter, maxCount, sort, facets);
 	}
 
 	/**

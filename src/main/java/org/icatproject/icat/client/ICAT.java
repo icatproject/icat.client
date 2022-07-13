@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonException;
 import javax.json.JsonReader;
 import javax.json.JsonString;
@@ -593,8 +594,8 @@ public class ICAT {
 	}
 
 	String searchInvestigations(String sessionId, String user, String text, Date lower, Date upper,
-			List<ParameterForLucene> parameters, List<String> samples, String userFullName, String searchAfter, int limit, String sort, String facets)
-			throws IcatException {
+			List<ParameterForLucene> parameters, String userFullName, String searchAfter, int maxCount, String sort,
+			JsonArray facets) throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("search/documents");
 		uriBuilder.setParameter("sessionId", sessionId);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -616,24 +617,19 @@ public class ICAT {
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
 			}
-			if (samples != null && !samples.isEmpty()) {
-				gen.writeStartArray("samples");
-				for (String sample : samples) {
-					gen.write(sample);
-				}
-				gen.writeEnd();
-			}
 			if (userFullName != null) {
 				gen.write("userFullName", userFullName);
+			}
+			if (facets != null) {
+				gen.write("facets", facets);
 			}
 			gen.writeEnd();
 		}
 
 		uriBuilder.setParameter("query", baos.toString());
 		uriBuilder.setParameter("search_after", searchAfter);
-		uriBuilder.setParameter("limit", Integer.toString(limit));
+		uriBuilder.setParameter("maxCount", Integer.toString(maxCount));
 		uriBuilder.setParameter("sort", sort);
-		uriBuilder.setParameter("facets", facets);
 		URI uri = getUri(uriBuilder);
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -689,7 +685,7 @@ public class ICAT {
 	}
 
 	String searchDatasets(String sessionId, String user, String text, Date lower, Date upper,
-			List<ParameterForLucene> parameters, String searchAfter, int limit, String sort, String facets) throws IcatException {
+			List<ParameterForLucene> parameters, String searchAfter, int maxCount, String sort, JsonArray facets) throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("search/documents");
 		uriBuilder.setParameter("sessionId", sessionId);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -711,14 +707,16 @@ public class ICAT {
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
 			}
+			if (facets != null) {
+				gen.write("facets", facets);
+			}
 			gen.writeEnd();
 		}
 
 		uriBuilder.setParameter("query", baos.toString());
 		uriBuilder.setParameter("search_after", searchAfter);
-		uriBuilder.setParameter("limit", Integer.toString(limit));
+		uriBuilder.setParameter("maxCount", Integer.toString(maxCount));
 		uriBuilder.setParameter("sort", sort);
-		uriBuilder.setParameter("facets", facets);
 		URI uri = getUri(uriBuilder);
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -905,7 +903,7 @@ public class ICAT {
 	}
 
 	String searchDatafiles(String sessionId, String user, String text, Date lower, Date upper,
-			List<ParameterForLucene> parameters, String searchAfter, int limit, String sort, String facets) throws IcatException {
+			List<ParameterForLucene> parameters, String searchAfter, int maxCount, String sort, JsonArray facets) throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("search/documents");
 		uriBuilder.setParameter("sessionId", sessionId);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -927,14 +925,16 @@ public class ICAT {
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
 			}
+			if (facets != null) {
+				gen.write("facets", facets);
+			}
 			gen.writeEnd();
 		}
 
 		uriBuilder.setParameter("query", baos.toString());
 		uriBuilder.setParameter("search_after", searchAfter);
-		uriBuilder.setParameter("limit", Integer.toString(limit));
+		uriBuilder.setParameter("maxCount", Integer.toString(maxCount));
 		uriBuilder.setParameter("sort", sort);
-		uriBuilder.setParameter("facets", facets);
 		URI uri = getUri(uriBuilder);
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
