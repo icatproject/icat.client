@@ -847,9 +847,11 @@ public class ICAT {
 	}
 
 	void lucenePopulate(String sessionId, String entityName, long minid) throws IcatException {
-		URI uri = getUri(getUriBuilder("lucene/db/" + entityName + "/" + minid));
+		URI uri = getUri(getUriBuilder("lucene/db/" + entityName));
 		List<NameValuePair> formparams = new ArrayList<>();
 		formparams.add(new BasicNameValuePair("sessionId", sessionId));
+		formparams.add(new BasicNameValuePair("minId", Long.toString(minid)));
+		formparams.add(new BasicNameValuePair("delete", "true"));
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			HttpPost httpPost = new HttpPost(uri);
