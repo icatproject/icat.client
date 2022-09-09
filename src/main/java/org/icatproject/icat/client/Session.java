@@ -352,6 +352,10 @@ public class Session {
 	/**
 	 * Return a set of investigations satisfying the constraints
 	 * 
+	 * @deprecated in favour of {@link #searchInvestigations(String, String, Date, Date, List, String, int, String, JsonArray)}, which allows an upper limit
+	 *             on population to be set and makes deletion of existing documents
+	 *             optional.
+	 * 
 	 * @param user
 	 *                     If not null must exactly match the name of a user related
 	 *                     via
@@ -396,6 +400,7 @@ public class Session {
 	 * @throws IcatException
 	 *                       For various ICAT errors.
 	 */
+	@Deprecated
 	public String searchInvestigations(String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, List<String> samples, String userFullName, int maxResults)
 			throws IcatException {
@@ -448,11 +453,11 @@ public class Session {
 	 *                     value pairs of the field(s) to sort on and their
 	 *                     direction
 	 * @param facets
-	 *                    String representing a JsonArray of JsonObjects. Each
-	 *                    should define the "target" entity name, and optionally
-	 *                    another JsonArray of "dimensions", which are specific
-	 *                    fields to facet. If absent, then all applicable fields
-	 *                    will be faceted.
+	 *                     String representing a JsonArray of JsonObjects. Each
+	 *                     should define the "target" entity name, and optionally
+	 *                     another JsonArray of "dimensions", which are specific
+	 *                     fields to facet. If absent, then all applicable fields
+	 *                     will be faceted.
 	 * 
 	 * @return the Json holding the result.
 	 * 
@@ -468,6 +473,10 @@ public class Session {
 
 	/**
 	 * Return a set of datasets satisfying the constraints
+	 * 
+	 * @deprecated in favour of {@link #searchDatasets(String, String, Date, Date, List, String, int, String, JsonArray)}, which allows an upper limit
+	 *             on population to be set and makes deletion of existing documents
+	 *             optional.
 	 * 
 	 * @param user
 	 *                   If not null must exactly match the name of a user related
@@ -494,6 +503,7 @@ public class Session {
 	 * @throws IcatException
 	 *                       For various ICAT errors.
 	 */
+	@Deprecated
 	public String searchDatasets(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			int maxResults) throws IcatException {
 		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, maxResults);
@@ -543,7 +553,8 @@ public class Session {
 	 */
 	public String searchDatasets(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			String searchAfter, int maxCount, String sort, JsonArray facets) throws IcatException {
-		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, searchAfter, maxCount, sort, facets);
+		return icat.searchDatasets(sessionId, user, text, lower, upper, parameters, searchAfter, maxCount, sort,
+				facets);
 	}
 
 	/**
@@ -569,14 +580,38 @@ public class Session {
 	/**
 	 * Clear and repopulate lucene documents for the specified entityName.
 	 * 
-	 * @param entityName
-	 *                   the name of the entity
+	 * @deprecated in favour of {@link #searchPopulate}, which allows an upper limit
+	 *             on population to be set and makes deletion of existing documents
+	 *             optional.
 	 * 
-	 * @throws IcatException
-	 *                       For various ICAT errors.
+	 * @param entityName the name of the entity
+	 * @param minId      Process entities with id values greater than (NOT equal to)
+	 *                   this value
+	 * 
+	 * @throws IcatException For various ICAT errors.
 	 */
-	public void lucenePopulate(String entityName, long minid) throws IcatException {
-		icat.lucenePopulate(sessionId, entityName, minid);
+	@Deprecated
+	public void lucenePopulate(String entityName, long minId) throws IcatException {
+		icat.lucenePopulate(sessionId, entityName, minId, null, true);
+	}
+
+	/**
+	 * Populates search engine documents for the specified entityName.
+	 * 
+	 * Optionally, this will also delete all existing documents of entityName. This
+	 * should only be used when repopulating from scratch is needed.
+	 * 
+	 * @param entityName the name of the entity
+	 * @param minId      Process entities with id values greater than (NOT equal to)
+	 *                   this value
+	 * @param maxId      Process entities up to and including with id up to and
+	 *                   including this value
+	 * @param delete     If true, then all existing documents of this type will be
+	 *                   deleted before adding new ones.
+	 * @throws IcatException For various ICAT errors.
+	 */
+	public void searchPopulate(String entityName, long minId, long maxId, boolean delete) throws IcatException {
+		icat.lucenePopulate(sessionId, entityName, minId, maxId, delete);
 	}
 
 	/**
@@ -593,6 +628,10 @@ public class Session {
 
 	/**
 	 * Return a set of data files satisfying the constraints
+	 * 
+	 * @deprecated in favour of {@link #searchDatafiles(String, String, Date, Date, List, String, int, String, JsonArray)}, which allows an upper limit
+	 *             on population to be set and makes deletion of existing documents
+	 *             optional.
 	 * 
 	 * @param user
 	 *                   If not null must exactly match the name of a user related
@@ -620,6 +659,7 @@ public class Session {
 	 * @throws IcatException
 	 *                       For various ICAT errors.
 	 */
+	@Deprecated
 	public String searchDatafiles(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			int maxResults) throws IcatException {
 		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, maxResults);
@@ -670,7 +710,8 @@ public class Session {
 	 */
 	public String searchDatafiles(String user, String text, Date lower, Date upper, List<ParameterForLucene> parameters,
 			String searchAfter, int maxCount, String sort, JsonArray facets) throws IcatException {
-		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, searchAfter, maxCount, sort, facets);
+		return icat.searchDatafiles(sessionId, user, text, lower, upper, parameters, searchAfter, maxCount, sort,
+				facets);
 	}
 
 	/**

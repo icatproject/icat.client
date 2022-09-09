@@ -846,12 +846,15 @@ public class ICAT {
 		}
 	}
 
-	void lucenePopulate(String sessionId, String entityName, long minid) throws IcatException {
+	void lucenePopulate(String sessionId, String entityName, Long minId, Long maxId, Boolean delete) throws IcatException {
 		URI uri = getUri(getUriBuilder("lucene/db/" + entityName));
 		List<NameValuePair> formparams = new ArrayList<>();
 		formparams.add(new BasicNameValuePair("sessionId", sessionId));
-		formparams.add(new BasicNameValuePair("minId", Long.toString(minid)));
-		formparams.add(new BasicNameValuePair("delete", "true"));
+		formparams.add(new BasicNameValuePair("minId", minId.toString()));
+		if (maxId != null) {
+			formparams.add(new BasicNameValuePair("maxId", maxId.toString()));
+		}
+		formparams.add(new BasicNameValuePair("delete", delete.toString()));
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			HttpPost httpPost = new HttpPost(uri);
