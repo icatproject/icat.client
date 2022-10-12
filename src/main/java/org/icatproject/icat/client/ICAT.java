@@ -47,8 +47,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.lucene.document.DateTools;
-import org.apache.lucene.document.DateTools.Resolution;
 import org.icatproject.icat.client.IcatException.IcatExceptionType;
 import org.icatproject.icat.client.Session.Attributes;
 import org.icatproject.icat.client.Session.DuplicateAction;
@@ -556,11 +554,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				// TODO Remove DateTools as it is from a Lucene library!
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -609,10 +606,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -665,10 +662,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -711,8 +708,8 @@ public class ICAT {
 			if (parameter.getStringValue() != null) {
 				gen.write("stringValue", parameter.getStringValue());
 			} else if (parameter.getLowerDateValue() != null && parameter.getUpperDateValue() != null) {
-				gen.write("lowerDateValue", DateTools.dateToString(parameter.getLowerDateValue(), Resolution.MINUTE));
-				gen.write("upperDateValue", DateTools.dateToString(parameter.getUpperDateValue(), Resolution.MINUTE));
+				gen.write("lowerDateValue", roundMinute(parameter.getLowerDateValue(), 0));
+				gen.write("upperDateValue", roundMinute(parameter.getUpperDateValue(), 59999));
 			} else if (parameter.getLowerNumericValue() != null && parameter.getUpperNumericValue() != null) {
 				gen.write("lowerNumericValue", parameter.getLowerNumericValue());
 				gen.write("upperNumericValue", parameter.getUpperNumericValue());
@@ -851,10 +848,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -941,6 +938,15 @@ public class ICAT {
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
+	}
+
+	/**
+	 * @param date   Date to round down to the minute
+	 * @param offset Number of ms to be added to the returned value
+	 * @return Rounded date, converted to ms with offset applied
+	 */
+	private long roundMinute(Date date, long offset) {
+		return (date.getTime() / 60000) * 60000 + offset;
 	}
 
 }

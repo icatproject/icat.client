@@ -106,7 +106,7 @@ public class TestIcatClient {
 
 	@Test
 	public void testInfo() throws Exception {
-		assertTrue(icat.getVersion().startsWith("5.0."));
+		assertTrue(icat.getVersion().startsWith("5.1."));
 	}
 
 }
