@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonNumber;
-import javax.json.JsonValue;
-import javax.json.stream.JsonGenerator;
+import jakarta.json.Json;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonGenerator;
 
 import org.icatproject.icat.client.ICAT;
 import org.icatproject.icat.client.IcatException;
@@ -106,7 +106,7 @@ public class TestIcatClient {
 
 	@Test
 	public void testInfo() throws Exception {
-		assertTrue(icat.getVersion().startsWith("5.0."));
+		assertTrue(icat.getVersion().startsWith("6.0."));
 	}
 
 }

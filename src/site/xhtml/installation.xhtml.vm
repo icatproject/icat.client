@@ -79,9 +79,15 @@
 		&#160;&#160;&#160;&#160;&#160;&#160;&lt;version&gt;${project.version}&lt;/version&gt;
 		<br /> &#160;&#160;&#160;&lt;/dependency&gt; <br /> <br />
 		&nbsp;&nbsp;&nbsp;&lt;dependency&gt; <br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.glassfish&lt;/groupId&gt;<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;jakarta.json&lt;/artifactId&gt;<br />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;1.1.5&lt;/version&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;org.eclipse.parsson&lt;/groupId&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;parsson&lt;/artifactId&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;1.1.0&lt;/version&gt;<br />
+		&nbsp;&nbsp;&nbsp;&lt;/dependency&gt;<br /> &#160;&#160;&#160;... <br />
+		&lt;/dependencies&gt; <br /> <br />
+		&nbsp;&nbsp;&nbsp;&lt;dependency&gt; <br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;groupId&gt;com.sun.xml.ws&lt;/groupId&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;artifactId&gt;jaxws-rt&lt;/artifactId&gt;<br />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;version&gt;4.0.0&lt;/version&gt;<br />
 		&nbsp;&nbsp;&nbsp;&lt;/dependency&gt;<br /> &#160;&#160;&#160;... <br />
 		&lt;/dependencies&gt;
 	</code>
