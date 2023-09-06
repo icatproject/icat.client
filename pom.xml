@@ -3,7 +3,7 @@
 
 	<groupId>org.icatproject</groupId>
 	<artifactId>icat.client</artifactId>
-	<version>5.1.0-SNAPSHOT</version>
+	<version>6.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>ICAT Clients</name>
 	<description>Provides facilities to login to an ICAT instance after which one can create, read, update or delete entities according to your permissions. This includes a Java client using SOAP access and a Java client using the REST interface of the icat.server.</description>
@@ -62,9 +62,10 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>7.0</version>
+			<groupId>jakarta.platform</groupId>
+			<artifactId>jakarta.jakartaee-api</artifactId>
+			<version>10.0.0</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -87,9 +88,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>jakarta.json</artifactId>
-			<version>1.1.5</version>
+			<groupId>org.eclipse.parsson</groupId>
+			<artifactId>parsson</artifactId>
+			<version>1.1.0</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -110,11 +111,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.10.1</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
-					<source>1.8</source>
-					<target>1.8</target>
+					<release>11</release>
 				</configuration>
 			</plugin>
 
@@ -141,9 +141,9 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.jvnet.jax-ws-commons</groupId>
+				<groupId>com.sun.xml.ws</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
-				<version>2.3</version>
+				<version>4.0.0</version>
 				<executions>
 					<execution>
 						<id>execution1</id>
