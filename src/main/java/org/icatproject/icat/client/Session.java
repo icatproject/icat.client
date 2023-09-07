@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.json.JsonArray;
+import jakarta.json.JsonArray;
 
 /**
  * A RESTful ICAT session.
