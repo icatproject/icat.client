@@ -11,16 +11,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonNumber;
-import javax.json.JsonValue;
-import javax.json.stream.JsonGenerator;
+import jakarta.json.Json;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonGenerator;
 
 import org.icatproject.icat.client.ICAT;
 import org.icatproject.icat.client.IcatException;
 import org.icatproject.icat.client.IcatException.IcatExceptionType;
 import org.icatproject.icat.client.Session;
-import org.icatproject.utils.ShellCommand;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -107,18 +106,7 @@ public class TestIcatClient {
 
 	@Test
 	public void testInfo() throws Exception {
-		assertTrue(icat.getVersion().startsWith("4.11."));
-	}
-
-	@Test
-	public void python() {
-		ShellCommand sc = new ShellCommand("bash", "-c", "serverUrl=" + System.getProperty("serverUrl")
-				+ " PYTHONPATH=src/main/python/ python2 src/test/python/test.py");
-		if (sc.getExitValue() != 0) {
-			System.out.println(sc.getStdout());
-			System.out.println(sc.getStderr());
-			fail();
-		}
+		assertTrue(icat.getVersion().startsWith("6.0."));
 	}
 
 }

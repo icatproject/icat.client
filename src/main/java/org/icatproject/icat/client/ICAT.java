@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.json.Json;
-import javax.json.JsonException;
-import javax.json.JsonReader;
-import javax.json.JsonString;
-import javax.json.JsonValue;
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
-import javax.json.stream.JsonParser.Event;
-import javax.json.stream.JsonParsingException;
+import jakarta.json.Json;
+import jakarta.json.JsonException;
+import jakarta.json.JsonReader;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
+import jakarta.json.stream.JsonGenerator;
+import jakarta.json.stream.JsonParser;
+import jakarta.json.stream.JsonParser.Event;
+import jakarta.json.stream.JsonParsingException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
