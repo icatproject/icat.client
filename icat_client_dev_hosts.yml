@@ -3,8 +3,6 @@
   become: true
   vars_files:
     - 'group_vars/all/vars.yml'
-  vars:
-    icat_server_version: '4.11.1'
   roles:
     - role: common
     - role: java
@@ -14,5 +12,5 @@
     - role: authn_simple
     - role: authn_db
     - role: icat_lucene
-    - role: dev_common
     - role: icat_server
+    - role: dev_common

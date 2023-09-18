@@ -8,16 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.experimental }}
+    runs-on: ubuntu-22.04
     strategy:
-      fail-fast: false
       matrix:
-        include:
-          - version: 8
-            experimental: false
-          - version: 11
-            experimental: true
+        java_version: [11, 17]
 
     steps:
       - name: Checkout ICAT Client
@@ -26,21 +20,13 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: ${{ matrix.version }}
+          java-version: ${{ matrix.java_version }}
           distribution: 'temurin'
 
       - name: Installation
         run: |
-          sudo pip install wheel ansible pycrypto
-          sudo add-apt-repository universe
+          sudo pip install ansible
           sudo apt-get update
-
-      - name: Setup python2
-        run: |
-          sudo apt install python2
-          curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-          sudo python2 get-pip.py
-          sudo python2 -m pip install requests requests_toolbelt
 
       - name: Checkout ICAT Ansible
         uses: actions/checkout@v2
@@ -61,12 +47,10 @@ jobs:
           cd icat-ansible
           echo -e "[icat_client_dev_hosts]\nlocalhost ansible_connection=local" > hosts
           echo -e "icattravispw" > vault_pass.txt
-          mv ../vault.yml ./group_vars/all
-          mv ../icat_client_dev_hosts.yml .
+          mv ./vault.yml ./group_vars/all
+          cp ../icat_client_dev_hosts.yml .
           sed -i -e "s/^payara_user: \"glassfish\"/payara_user: \"runner\"/" ./group_vars/all/vars.yml
-          sed -i -e "s/python-pip/python3-pip/" ./roles/dev_common/tasks/main.yml
           ansible-playbook --vault-password-file ./vault_pass.txt --inventory ./hosts ./icat_client_dev_hosts.yml
-          cd ..
 
       - name: Test with Maven
         run: mvn -DserverUrl=https://$(hostname -f):8181 test -B
