@@ -1,6 +1,6 @@
 # icat.client: Clients for ICAT
 
-[![Build Status](https://travis-ci.org/icatproject/icat.client.svg?branch=master)](https://travis-ci.org/icatproject/icat.client)
+[![Build Status](https://github.com/icatproject/icat.client/workflows/CI%20Build/badge.svg?branch=master)](https://github.com/icatproject/icat.client/actions?query=workflow%3A%22CI+Build%22)
 
 General installation instructions are at https://icatproject.org/installation/component
 
