@@ -1,0 +1,16 @@
+---
+- hosts: icat_client_dev_hosts
+  become: true
+  vars_files:
+    - 'group_vars/all/vars.yml'
+  roles:
+    - role: common
+    - role: java
+    - role: mariadb
+    - role: icatdb
+    - role: payara
+    - role: authn_simple
+    - role: authn_db
+    - role: icat_lucene
+    - role: icat_server
+    - role: dev_common
