@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonException;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonString;
@@ -46,8 +47,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.apache.lucene.document.DateTools;
-import org.apache.lucene.document.DateTools.Resolution;
 import org.icatproject.icat.client.IcatException.IcatExceptionType;
 import org.icatproject.icat.client.Session.Attributes;
 import org.icatproject.icat.client.Session.DuplicateAction;
@@ -64,10 +63,10 @@ public class ICAT {
 	 * URI
 	 * 
 	 * @param urlString
-	 *            The URI of a server in the form https://example.com:443.
+	 *                  The URI of a server in the form https://example.com:443.
 	 * 
 	 * @throws URISyntaxException
-	 *             If the urlString is not a valid URI
+	 *                            If the urlString is not a valid URI
 	 */
 	public ICAT(String urlString) throws URISyntaxException {
 		this.uri = new URI(urlString);
@@ -381,13 +380,13 @@ public class ICAT {
 	 * See whether or not someone is logged in.
 	 * 
 	 * @param userName
-	 *            which must include mnemonic if the authenticator plugin is
-	 *            configured to return them.
+	 *                 which must include mnemonic if the authenticator plugin is
+	 *                 configured to return them.
 	 * 
 	 * @return true if at least one session exists else false.
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public boolean isLoggedIn(String userName) throws IcatException {
 		URI uri = getUri(getUriBuilder("user/" + userName));
@@ -406,13 +405,13 @@ public class ICAT {
 	 * Login to a RESTful ICAT instance and return a Session
 	 * 
 	 * @param plugin
-	 *            The mnemonic of the authentication plugin
+	 *                    The mnemonic of the authentication plugin
 	 * @param credentials
-	 *            A map holding credential key/value pairs
+	 *                    A map holding credential key/value pairs
 	 * @return A RESTful ICAT Session
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public Session login(String plugin, Map<String, String> credentials) throws IcatException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -446,7 +445,7 @@ public class ICAT {
 	 * No check is made on the validity of the sessionId.
 	 * 
 	 * @param sessionId
-	 *            the sessionId to hold in the session.
+	 *                  the sessionId to hold in the session.
 	 * 
 	 * @return the new session
 	 */
@@ -502,7 +501,7 @@ public class ICAT {
 	 * @return the version of the ICAT server
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	@Deprecated
 	public String getApiVersion() throws IcatException {
@@ -524,7 +523,7 @@ public class ICAT {
 	 * @return the version of the ICAT server
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public String getVersion() throws IcatException {
 		URI uri = getUri(getUriBuilder("version"));
@@ -555,11 +554,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				// TODO Remove DateTools as it is from a Lucene library!
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -592,6 +590,63 @@ public class ICAT {
 		}
 	}
 
+	private String searchDocuments(String target, String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, String userFullName, String searchAfter, int maxCount, String sort,
+			JsonArray facets) throws IcatException {
+		URIBuilder uriBuilder = getUriBuilder("search/documents");
+		uriBuilder.setParameter("sessionId", sessionId);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try (JsonGenerator gen = Json.createGenerator(baos)) {
+			gen.writeStartObject();
+			gen.write("target", target);
+			if (user != null) {
+				gen.write("user", user);
+			}
+			if (text != null) {
+				gen.write("text", text);
+			}
+			if (lower != null) {
+				gen.write("lower", roundMinute(lower, 0));
+			}
+			if (upper != null) {
+				gen.write("upper", roundMinute(upper, 59999));
+			}
+			if (parameters != null && !parameters.isEmpty()) {
+				writeParameters(gen, parameters);
+			}
+			if (userFullName != null) {
+				gen.write("userFullName", userFullName);
+			}
+			if (facets != null) {
+				gen.write("facets", facets);
+			}
+			gen.writeEnd();
+		}
+
+		uriBuilder.setParameter("query", baos.toString());
+		uriBuilder.setParameter("search_after", searchAfter);
+		uriBuilder.setParameter("maxCount", Integer.toString(maxCount));
+		uriBuilder.setParameter("sort", sort);
+		URI uri = getUri(uriBuilder);
+
+		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+			HttpGet httpGet = new HttpGet(uri);
+			try (CloseableHttpResponse response = httpclient.execute(httpGet)) {
+				return getString(response);
+			}
+		} catch (IOException e) {
+			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
+
+		}
+	}
+
+	String searchInvestigations(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, String userFullName, String searchAfter, int maxCount, String sort,
+			JsonArray facets) throws IcatException {
+		return searchDocuments("Investigation", sessionId, user, text, lower, upper, parameters, userFullName,
+				searchAfter, maxCount, sort, facets);
+	}
+
 	String searchDatasets(String sessionId, String user, String text, Date lower, Date upper,
 			List<ParameterForLucene> parameters, int maxResults) throws IcatException {
 		URIBuilder uriBuilder = getUriBuilder("lucene/data");
@@ -607,10 +662,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -633,6 +688,13 @@ public class ICAT {
 		}
 	}
 
+	String searchDatasets(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, String searchAfter, int maxCount, String sort, JsonArray facets)
+			throws IcatException {
+		return searchDocuments("Dataset", sessionId, user, text, lower, upper, parameters, null, searchAfter, maxCount,
+				sort, facets);
+	}
+
 	private void writeParameters(JsonGenerator gen, List<ParameterForLucene> parameters) {
 		gen.writeStartArray("parameters");
 		for (ParameterForLucene parameter : parameters) {
@@ -646,8 +708,8 @@ public class ICAT {
 			if (parameter.getStringValue() != null) {
 				gen.write("stringValue", parameter.getStringValue());
 			} else if (parameter.getLowerDateValue() != null && parameter.getUpperDateValue() != null) {
-				gen.write("lowerDateValue", DateTools.dateToString(parameter.getLowerDateValue(), Resolution.MINUTE));
-				gen.write("upperDateValue", DateTools.dateToString(parameter.getUpperDateValue(), Resolution.MINUTE));
+				gen.write("lowerDateValue", roundMinute(parameter.getLowerDateValue(), 0));
+				gen.write("upperDateValue", roundMinute(parameter.getUpperDateValue(), 59999));
 			} else if (parameter.getLowerNumericValue() != null && parameter.getUpperNumericValue() != null) {
 				gen.write("lowerNumericValue", parameter.getLowerNumericValue());
 				gen.write("upperNumericValue", parameter.getUpperNumericValue());
@@ -682,7 +744,7 @@ public class ICAT {
 	 * @return the json string
 	 * 
 	 * @throws IcatException
-	 *             For various ICAT errors
+	 *                       For various ICAT errors
 	 */
 	public String getProperties() throws IcatException {
 		URI uri = getUri(getUriBuilder("properties"));
@@ -749,10 +811,16 @@ public class ICAT {
 		}
 	}
 
-	void lucenePopulate(String sessionId, String entityName, long minid) throws IcatException {
-		URI uri = getUri(getUriBuilder("lucene/db/" + entityName + "/" + minid));
+	void lucenePopulate(String sessionId, String entityName, Long minId, Long maxId, Boolean delete)
+			throws IcatException {
+		URI uri = getUri(getUriBuilder("lucene/db/" + entityName));
 		List<NameValuePair> formparams = new ArrayList<>();
 		formparams.add(new BasicNameValuePair("sessionId", sessionId));
+		formparams.add(new BasicNameValuePair("minId", minId.toString()));
+		if (maxId != null) {
+			formparams.add(new BasicNameValuePair("maxId", maxId.toString()));
+		}
+		formparams.add(new BasicNameValuePair("delete", delete.toString()));
 
 		try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
 			HttpPost httpPost = new HttpPost(uri);
@@ -780,10 +848,10 @@ public class ICAT {
 				gen.write("text", text);
 			}
 			if (lower != null) {
-				gen.write("lower", DateTools.dateToString(lower, Resolution.MINUTE));
+				gen.write("lower", roundMinute(lower, 0));
 			}
 			if (upper != null) {
-				gen.write("upper", DateTools.dateToString(upper, Resolution.MINUTE));
+				gen.write("upper", roundMinute(upper, 59999));
 			}
 			if (parameters != null && !parameters.isEmpty()) {
 				writeParameters(gen, parameters);
@@ -803,6 +871,13 @@ public class ICAT {
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
+	}
+
+	String searchDatafiles(String sessionId, String user, String text, Date lower, Date upper,
+			List<ParameterForLucene> parameters, String searchAfter, int maxCount, String sort, JsonArray facets)
+			throws IcatException {
+		return searchDocuments("Datafile", sessionId, user, text, lower, upper, parameters, null, searchAfter, maxCount,
+				sort, facets);
 	}
 
 	long cloneEntity(String sessionId, String name, long id, Map<String, String> keys) throws IcatException {
@@ -863,6 +938,15 @@ public class ICAT {
 		} catch (IOException e) {
 			throw new IcatException(IcatExceptionType.INTERNAL, e.getClass() + " " + e.getMessage());
 		}
+	}
+
+	/**
+	 * @param date   Date to round down to the minute
+	 * @param offset Number of ms to be added to the returned value
+	 * @return Rounded date, converted to ms with offset applied
+	 */
+	private long roundMinute(Date date, long offset) {
+		return (date.getTime() / 60000) * 60000 + offset;
 	}
 
 }

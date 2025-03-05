@@ -3,7 +3,7 @@
 
 	<groupId>org.icatproject</groupId>
 	<artifactId>icat.client</artifactId>
-	<version>6.0.1-SNAPSHOT</version>
+	<version>6.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>ICAT Clients</name>
 	<description>Provides facilities to login to an ICAT instance after which one can create, read, update or delete entities according to your permissions. This includes a Java client using SOAP access and a Java client using the REST interface of the icat.server.</description>
@@ -14,7 +14,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<project.scm.id>github</project.scm.id>
 		<repoUrl>https://repo.icatproject.org/repo/</repoUrl>
-		<luceneVersion>5.3.0</luceneVersion>
 	</properties>
 
 	<repositories>
@@ -61,12 +60,6 @@
 	</distributionManagement>
 
 	<dependencies>
-
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>${luceneVersion}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>jakarta.platform</groupId>
@@ -298,4 +291,3 @@
 	</reporting>
 
 </project>
-
